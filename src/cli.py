@@ -14,26 +14,18 @@ import os.path
 import socket
 import sys
 
+import talk
 import config
 
 options = docopt(__doc__)
 
 config.load_config(options['--config'])
 
-soc = socket.socket()
-soc.connect(('localhost', config.control_port))
-
-back = soc.recv(7)
-assert back == "Hello!\n", "Failed to establish connection (got '{0}')".format(back)
-
 cmd_details = options['<command-detail>']
 if options['--yaml']:
     cmd_details.append('--yaml')
 cmd = ' ' .join(cmd_details) + "\n"
+
 #print cmd
-soc.send(cmd)
-while True:
-    back = soc.recv(256)
-    sys.stdout.write(back)
-    if len(back) < 256:
-        break
+back = talk.command(cmd)
+print back
