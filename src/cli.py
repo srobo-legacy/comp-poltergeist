@@ -12,6 +12,7 @@ Options:
 from docopt import docopt
 import os.path
 import socket
+import sys
 
 import config
 
@@ -33,6 +34,6 @@ cmd = ' ' .join(cmd_details) + "\n"
 soc.send(cmd)
 while True:
     back = soc.recv(256)
-    print back,
+    sys.stdout.write(back)
     if len(back) < 256:
         break
