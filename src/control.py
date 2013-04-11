@@ -31,6 +31,7 @@ Usage:
   compctl add-match [--knockout] <name> <time>
   compctl del-match <name>
   compctl set-match-teams <name> <team>...
+  compctl get-match-teams [--yaml] <match-id>
   compctl clear-match-teams <name>
   compctl list-matches <from> <to>
 

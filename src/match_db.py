@@ -5,6 +5,7 @@ import redis_client
 import control
 import re
 from twisted.internet import defer
+import yaml
 
 from utils import format_time, parse_time
 
@@ -35,6 +36,13 @@ class MatchDB(object):
                 redis_client.connection.rpush('match:matches:{0}:teams'.format(name),
                                               team)
 
+    @defer.inlineCallbacks
+    def get_teams(self, name):
+        """Get the teams for a match."""
+        n_teams = yield redis_client.connection.llen('match:matches:{0}:teams'.format(name))
+        teams = yield redis_client.connection.lrange('match:matches:{0}:teams'.format(name), 0, n_teams-1)
+        defer.returnValue(teams)
+
     def matches_between(self, start, end):
         """Get events between a given start and end point, specified in
         seconds from the start of the day.
@@ -46,6 +54,7 @@ class MatchDB(object):
                                                      withscores=True)
 
 matches = MatchDB()
+yaml_opt = '--yaml'
 
 @control.handler('add-match')
 def perform_add_match(responder, options):
@@ -64,6 +73,20 @@ def perform_set_match_teams(responder, options):
     matches.set_teams(options['<name>'],
                       options['<team>'])
     responder('Teams set.')
+
+@control.handler('get-match-teams')
+@defer.inlineCallbacks
+def perform_get_match_teams(responder, options):
+    match = options['<match-id>']
+    teams = yield matches.get_teams(match)
+    if options.get(yaml_opt, False):
+        responder(yaml.dump({'teams': teams}))
+    else:
+        if len(teams) == 0:
+            responder('No teams are in match {0}'.format(match))
+        else:
+            teams_str = ', '.join(teams)
+            responder('Team(s) {0} are in match {1}'.format(teams_str, match))
 
 @control.handler('clear-match-teams')
 def perform_clear_match_teams(responder, options):
