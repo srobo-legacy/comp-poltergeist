@@ -18,8 +18,22 @@ def test_parse_time_0():
     assertEqual(expected, actual)
 
 def test_parse_time_1():
+    human = '2011-04-03T00:00'
+    expected = datetime.datetime(2011, 04, 03)
+    actual_raw = match_db.parse_time(human)
+    actual = datetime.datetime.fromtimestamp(actual_raw)
+    assertEqual(expected, actual)
+
+def test_parse_time_2():
     human = '2011-04-03T00:00:00'
     expected = datetime.datetime(2011, 04, 03)
+    actual_raw = match_db.parse_time(human)
+    actual = datetime.datetime.fromtimestamp(actual_raw)
+    assertEqual(expected, actual)
+
+def test_parse_time_3():
+    human = '2013-04-13T09:01'
+    expected = datetime.datetime(2013, 04, 13, 9, 1)
     actual_raw = match_db.parse_time(human)
     actual = datetime.datetime.fromtimestamp(actual_raw)
     assertEqual(expected, actual)
