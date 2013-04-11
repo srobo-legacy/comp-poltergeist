@@ -4,10 +4,8 @@ from uuid import uuid4
 import redis_client
 import control
 import re
-import parsedatetime
-import time
-import datetime
 
+from utils import format_time, parse_time
 
 EVENT_TYPES = ('league', 'knockout', 'lunch', 'open',
                'tinker', 'photo', 'prizes', 'briefing')
@@ -59,18 +57,6 @@ schedule = ScheduleDB()
 class ParseError(Exception):
     """Indicates an error when parsing time values."""
     pass
-
-def parse_time(s):
-    """Parse a human-readable time format into a UNIX timestamp."""
-    calendar = parsedatetime.Calendar()
-    result, accuracy = calendar.parse(s)
-    if accuracy == 0:
-        raise ParseError()
-    return time.mktime(result)
-
-def format_time(n):
-    """Convert from a UNIX timestamp into a human-readable time format."""
-    return str(datetime.datetime.fromtimestamp(n))
 
 @control.handler('schedule')
 def perform_schedule(responder, options):

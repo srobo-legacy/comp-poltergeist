@@ -58,22 +58,6 @@ def test_events_between():
                                                          uniq3,
                                                          withscores=True)
 
-def test_time_parse():
-    assert schedule_db.parse_time('9:00') == 3600*9
-    assert schedule_db.parse_time('12:00') == 3600*12
-    assert schedule_db.parse_time('16:30') == 3600*16 + 60*30
-    assert schedule_db.parse_time('16:30:35') == 3600*16 + 60*30 + 35
-    try:
-        schedule_db.parse_time('whenever')
-        assert False
-    except schedule_db.ParseError:
-        pass
-
-def test_format_time():
-    assert schedule_db.format_time(3600*8 +
-                                   60*3 +
-                                   45) == '8:03:45'
-
 def test_command_unschedule():
     mock_cancel = mock.Mock()
     with mock.patch('schedule_db.schedule.cancel_event', mock_cancel):
