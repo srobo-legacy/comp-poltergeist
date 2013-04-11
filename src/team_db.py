@@ -151,7 +151,9 @@ def perform_append_notes(responder, options):
     team = yield roster.get(options['<tla>'])
     notes = team['notes']
     # add a full stop if there isn't one
-    if notes and notes[-1] not in '.?!':
+    if notes == None:
+        notes = ""
+    elif notes and notes[-1] not in '.?!':
         notes += '.'
     notes += ' {0}'.format(options['<note>'])
     roster.update(options['<tla>'],
