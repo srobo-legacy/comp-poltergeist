@@ -14,7 +14,7 @@ Usage:
   compctl append-note <tla> <note>
   compctl set-team-present <tla>
   compctl set-team-absent <tla>
-  compctl list-teams
+  compctl list-teams [--yaml]
   compctl team [--yaml] <tla>
   compctl screen-list
   compctl screen-set-mode <id> <mode>

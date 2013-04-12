@@ -106,11 +106,24 @@ def perform_team(responder, options):
 @defer.inlineCallbacks
 def perform_list_teams(responder, options):
     list = yield roster.list()
+
     if not list:
-        responder('No teams in database.')
+        if options.get(yaml_opt, False):
+            responder(yaml.dump({'list': list}))
+        else:
+            responder('No teams in database.')
+        return
+
+    names_list = []
     for tla in list:
         info = yield roster.get(tla)
-        responder('{0}: {1}'.format(tla, info['name']))
+        if not options.get(yaml_opt, False):
+            responder('{0}: {1}'.format(tla, info['name']))
+        else:
+            names_list.append(info['name'])
+
+    if options.get(yaml_opt, False):
+        responder(yaml.dump({'list': list}))
 
 @control.handler('add-team')
 def perform_add_team(responder, options):
