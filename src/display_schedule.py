@@ -2,13 +2,13 @@
 import config
 
 import talk
-import dateutil.parser
+from datetime import datetime
 from display_utils import get_team_name
 
 config.load_config()
 
-match_data = talk.command('list-matches 2013 2014')
-match_list = match_data.strip().split("\n")
+match_data = talk.command_yaml('list-matches 2013 2014')
+match_data = match_data['matches']
 
 print '''//TITLE: 2013 Match Schedule
 
@@ -17,10 +17,8 @@ print '''//TITLE: 2013 Match Schedule
 
 date = None
 
-for line in match_list[1:]:
-    #print line
-    dt_str, ident = line.rsplit(':', 1)
-    dt = dateutil.parser.parse(dt_str)
+for ident, stamp in match_data[1:]:
+    dt = datetime.fromtimestamp(stamp)
     teams_data = talk.command_yaml('get-match-teams {0}'.format(ident))
     #print teams_data
     team_ids = teams_data['teams']
