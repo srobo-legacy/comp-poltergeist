@@ -28,13 +28,16 @@ class MatchDB(object):
         redis_client.connection.zrem('match:schedule', name)
         redis_client.connection.publish('match:schedule', 'update')
 
+    @defer.inlineCallbacks
     def set_teams(self, name, teams):
         """Set the teams for a match."""
-        redis_client.connection.delete('match:matches:{0}:teams'.format(name))
+        yield redis_client.connection.delete('match:matches:{0}:teams'.format(name))
         if teams is not None:
             for team in teams:
-                redis_client.connection.rpush('match:matches:{0}:teams'.format(name),
-                                              team)
+                yield redis_client.connection.rpush('match:matches:{0}:teams'.format(name),
+                                                    team)
+        redis_client.connection.publish('match:schedule', 'update')
+
 
     @defer.inlineCallbacks
     def get_teams(self, name):
