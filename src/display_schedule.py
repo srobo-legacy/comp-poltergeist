@@ -17,8 +17,7 @@ print '''//TITLE: 2013 Match Schedule
 
 date = None
 
-# FIXME: the first match data is problematic!
-for ident, stamp in match_data[1:]:
+for ident, stamp in match_data:
     dt = datetime.fromtimestamp(stamp)
     teams_data = talk.command_yaml('get-match-teams {0}'.format(ident))
     #print teams_data
