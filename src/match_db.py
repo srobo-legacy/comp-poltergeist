@@ -99,6 +99,11 @@ def perform_list_matches(responder, options):
     fr = parse_time(options['<from>'])
     to = parse_time(options['<to>'])
     output = yield matches.matches_between(fr, to)
+
+    if options.get(yaml_opt, False):
+        responder(yaml.dump({'matches': output}))
+        return
+
     if not output:
         responder('No matches.')
     else:

@@ -33,7 +33,7 @@ Usage:
   compctl set-match-teams <name> <team>...
   compctl get-match-teams [--yaml] <match-id>
   compctl clear-match-teams <name>
-  compctl list-matches <from> <to>
+  compctl list-matches [--yaml] <from> <to>
 
 """
 
