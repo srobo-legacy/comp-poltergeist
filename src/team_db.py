@@ -123,7 +123,8 @@ def perform_list_teams(responder, options):
             names_list.append(info['name'])
 
     if options.get(yaml_opt, False):
-        responder(yaml.dump({'list': list}))
+        teams_data = dict(zip(list, names_list))
+        responder(yaml.dump({'list': teams_data}))
 
 @control.handler('add-team')
 def perform_add_team(responder, options):
