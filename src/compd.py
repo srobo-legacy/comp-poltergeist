@@ -53,6 +53,8 @@ def got_redis_client():
     import scores_db
     print 'Loading match DB...'
     import match_db
+    print 'Loading kill config...'
+    import kill
     print 'Done configuring.'
 
 def got_redis_server():
