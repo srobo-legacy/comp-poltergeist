@@ -27,7 +27,7 @@ for ident, stamp in match_data:
     if date != this_date:
         date = this_date
         print
-        print '##', date
+        print '##', date.strftime('%A, %d %B %Y')
         print '| Time | Match | Zone 0 | Zone 1 | Zone 2 | Zone 3 |'
         print '|------|-------|-------|'
 
