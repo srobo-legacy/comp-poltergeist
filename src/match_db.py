@@ -34,8 +34,10 @@ class MatchDB(object):
         yield redis_client.connection.delete('match:matches:{0}:teams'.format(name))
         if teams is not None:
             for team in teams:
-                redis_client.connection.rpush('match:matches:{0}:teams'.format(name),
-                                              team)
+                yield redis_client.connection.rpush('match:matches:{0}:teams'.format(name),
+                                                    team)
+        redis_client.connection.publish('match:schedule', 'update')
+
 
     @defer.inlineCallbacks
     def get_teams(self, name):
