@@ -4,6 +4,7 @@ import redis_client
 import control
 from twisted.internet import defer
 import re
+import yaml
 
 class TeamDB(object):
     """A team database."""
@@ -83,12 +84,18 @@ class TeamDB(object):
                            'present': present == 'yes'})
 
 roster = TeamDB()
+yaml_opt = '--yaml'
 
 @control.handler('team')
 @defer.inlineCallbacks
 def perform_team(responder, options):
     tla = options['<tla>']
     team = yield roster.get(options['<tla>'])
+
+    if options.get(yaml_opt, False):
+        responder(yaml.dump({'team': team}))
+        return
+
     responder('{0}: {1}'.format(tla, team['name']))
     responder('    College: {0}'.format(team['college']))
     responder('    ' + ('PRESENT' if team['present'] else 'ABSENT'))

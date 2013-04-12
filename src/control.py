@@ -15,7 +15,7 @@ Usage:
   compctl set-team-present <tla>
   compctl set-team-absent <tla>
   compctl list-teams
-  compctl team <tla>
+  compctl team [--yaml] <tla>
   compctl screen-list
   compctl screen-set-mode <id> <mode>
   compctl screen-override <id> <message>
