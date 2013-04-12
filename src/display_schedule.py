@@ -46,4 +46,4 @@ for line in match_list[1:]:
         print '| Time | Match | Teams |'
         print '|------|-------|-------|'
 
-    print "| {0} | {1} | {2} |".format(dt.time(), ident, ', '.join(teams))
+    print "| {0} | {1} | {2} |".format(dt.time(), ident, ',<br />'.join(teams))
