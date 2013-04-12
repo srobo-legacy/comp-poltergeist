@@ -29,7 +29,8 @@ for ident, stamp in match_data[1:]:
         date = this_date
         print
         print '##', date
-        print '| Time | Match | Teams |'
+        print '| Time | Match | Zone 0 | Zone 1 | Zone 2 | Zone 3 |'
         print '|------|-------|-------|'
 
-    print "| {0} | {1} | {2} |".format(dt.time(), ident, ',<br />'.join(teams))
+    num = ident[6:]
+    print "| {0} | {1} | {2} |".format(dt.time(), num, ' | '.join(teams))
