@@ -9,6 +9,9 @@ DELAYS = {
     date(2013, 04, 13): timedelta(minutes = 6)
 }
 
+# Over-estimate for optimisation
+TOTAL_MATCHES = 150
+
 _team_cache = {}
 def get_team_name(tla):
     if tla not in _team_cache:
@@ -63,3 +66,11 @@ def get_sorted_league_points():
 
     sorted_tuples = gen_pts_tla(pts_list, pts_map)
     return sorted_tuples
+
+def last_scored_match():
+
+    for n in range(1, TOTAL_MATCHES + 1):
+        scores = talk.command_yaml('get-scores match-{0}'.format(n))
+        if scores['scores'] is None:
+            return n - 1
+    return n

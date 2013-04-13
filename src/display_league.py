@@ -8,12 +8,15 @@ config.load_config()
 
 QUALIFYING_TEAMS = 24
 
+last_scored_match = display_utils.last_scored_match()
 print '''//TITLE: 2013 Competition League
 
 # League Status
 
+Up to date with scores from match {0}
+
 | Position | Points | Team |
-|----------|--------|------|'''
+|----------|--------|------|'''.format(last_scored_match)
 
 pos = 1
 team_list = display_utils.get_team_list()
