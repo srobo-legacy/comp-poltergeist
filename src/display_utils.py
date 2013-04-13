@@ -1,6 +1,8 @@
 
-import talk
 from datetime import timedelta, date
+from collections import defaultdict
+
+import talk
 
 # Set the delay of the current
 DELAYS = {
@@ -30,3 +32,34 @@ def get_delayed_time(original):
     delay = DELAYS.get(orig_date, timedelta(0))
     new_dt = original + delay
     return new_dt
+
+_team_list = None
+def get_team_list():
+    global _team_list
+    if _team_list is None:
+        team_data = talk.command_yaml('list-teams')
+        _team_list = team_data['list']
+
+    return _team_list
+
+def gen_pts_tla(points_sorted, points_map):
+    for pts in points_sorted:
+        for tla in points_map[pts]:
+            yield pts, tla
+
+def get_sorted_league_points():
+    team_list = get_team_list()
+
+    pts_map = defaultdict(lambda: [])
+
+    for tla in team_list.keys():
+        league_data = talk.command_yaml('get-league-points {0}'.format(tla))
+        pts = league_data['points']
+        pts = pts if pts else 0
+        pts_map[pts].append(tla)
+
+    pts_list = sorted(pts_map.keys(), reverse=True)
+    pos = 1
+
+    sorted_tuples = gen_pts_tla(pts_list, pts_map)
+    return sorted_tuples

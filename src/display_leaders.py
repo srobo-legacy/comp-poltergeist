@@ -3,19 +3,11 @@ from collections import defaultdict
 import config
 
 import talk
-from display_utils import format_name
-
-def gen_pts_tla(points_sorted, points_map):
-    for pts in points_sorted:
-        for tla in points_map[pts]:
-            yield pts, tla
+from display_utils import get_sorted_league_points
 
 MAX_POS = 10
 
 config.load_config()
-
-team_data = talk.command_yaml('list-teams')
-team_list = team_data['list']
 
 QUALIFYING_TEAMS = 24
 
@@ -23,18 +15,10 @@ print '<table><tr>'
 print '<th> Position </th><th> Points </th><th> Team </th>'
 print '</tr><tr>'
 
-pts_map = defaultdict(lambda: [])
-
-for tla in team_list.keys():
-    league_data = talk.command_yaml('get-league-points {0}'.format(tla))
-    pts = league_data['points']
-    pts = pts if pts else 0
-    pts_map[pts].append(tla)
-
-pts_list = sorted(pts_map.keys(), reverse=True)
 pos = 1
+sorted_tuples = get_sorted_league_points()
 
-for pts, tla in gen_pts_tla(pts_list, pts_map):
+for pts, tla in sorted_tuples:
     if pos == QUALIFYING_TEAMS + 1:
         print '<td> - </td><td> - </td><td> - </td>'
 
