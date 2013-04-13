@@ -20,6 +20,8 @@ team_list = team_data['list']
 QUALIFYING_TEAMS = 24
 
 print '<table><tr>'
+print '<th> Position </th><th> Points </th><th> Team </th>'
+print '</tr><tr>'
 
 pts_map = defaultdict(lambda: [])
 
