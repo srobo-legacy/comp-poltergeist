@@ -1,0 +1,4 @@
+#!/bin/bash
+cat data/2013/teams | nc localhost 18333
+cd match-scheduler/
+./import-matches.sh
