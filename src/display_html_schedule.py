@@ -22,7 +22,6 @@ date = now.date()
 i = 0
 
 for ident, stamp in match_data:
-    print '</tr><tr>'
     dt = datetime.fromtimestamp(stamp)
     dt = get_delayed_time(dt)
     if dt < now:
@@ -40,6 +39,7 @@ for ident, stamp in match_data:
     i += 1
 
     num = ident[6:]
+    print '</tr><tr>'
     print "<td> {0} </td><td> {1} </td><td> {2} </td>".format(dt.time(), num, ' </td><td> '.join(team_ids))
 
 print '</tr></table>'
