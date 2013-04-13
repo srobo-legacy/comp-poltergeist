@@ -1,5 +1,11 @@
 
 import talk
+from datetime import timedelta, date
+
+# Set the delay of the current
+DELAYS = {
+    date(2013, 04, 13): timedelta(minutes = 6)
+}
 
 _team_cache = {}
 def get_team_name(tla):
@@ -18,3 +24,9 @@ def format_name(tla, name):
     else:
         name = tla
     return name
+
+def get_delayed_time(original):
+    orig_date = original.date()
+    delay = DELAYS.get(orig_date, timedelta(0))
+    new_dt = original + delay
+    return new_dt

@@ -3,7 +3,7 @@ import config
 
 import talk
 from datetime import datetime
-from display_utils import get_team_name
+from display_utils import get_team_name, get_delayed_time
 
 config.load_config()
 
@@ -24,6 +24,7 @@ i = 0
 for ident, stamp in match_data:
     print '</tr><tr>'
     dt = datetime.fromtimestamp(stamp)
+    dt = get_delayed_time(dt)
     if dt < now:
         continue
     teams_data = talk.command_yaml('get-match-teams {0}'.format(ident))
