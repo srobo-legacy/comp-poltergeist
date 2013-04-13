@@ -17,11 +17,14 @@ def _get_connection():
     return _soc
 
 def command(cmd):
+    import time
     soc = _get_connection()
     if cmd[-1] != "\n": cmd += "\n"
     soc.send(cmd)
     data = ''
     while True:
+        # HACK: inject a delay so we pick up all the data
+        time.sleep(0.1)
         back = soc.recv(256)
         data += back
         if len(back) < 256:
