@@ -35,12 +35,10 @@ pts_list = sorted(pts_map.keys(), reverse=True)
 pos = 1
 
 for pts, tla in gen_pts_tla(pts_list, pts_map):
-    team = format_name(tla, team_list[tla])
-
     if pos == QUALIFYING_TEAMS + 1:
         print '<td> - </td><td> - </td><td> - </td>'
 
-    print "<td> {0} </td><td> {1} </td><td> {2} </td>".format(pos, pts, team)
+    print "<td> {0} </td><td> {1} </td><td> {2} </td>".format(pos, pts, tla)
     pos += 1
     if pos > MAX_POS:
         break
