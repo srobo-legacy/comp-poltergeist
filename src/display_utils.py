@@ -13,6 +13,8 @@ DELAYS = {
 # Over-estimate for optimisation
 TOTAL_MATCHES = 150
 
+MATCH_ID = 'match-{0}'
+
 _team_cache = {}
 def get_team_name(tla):
     if tla not in _team_cache:
@@ -83,10 +85,22 @@ def get_all_league_rows(row_limit = None):
             break
         row += 1
 
-def last_scored_match():
+_all_match_scores = None
+def get_all_match_scores():
+    global _all_match_scores
+    if _all_match_scores is None:
+        _all_match_scores = {}
+        for n in range(1, TOTAL_MATCHES + 1):
+            ident = MATCH_ID.format(n)
+            scores = talk.command_yaml('get-scores {0}'.format(ident))
+            _all_match_scores[ident] = scores['scores']
+    return _all_match_scores
 
+def last_scored_match():
+    all_scores = get_all_match_scores()
     for n in range(1, TOTAL_MATCHES + 1):
-        scores = talk.command_yaml('get-scores match-{0}'.format(n))
-        if scores['scores'] is None:
-            return n - 1
+        ident = MATCH_ID.format(n)
+        scores = all_scores[ident]
+        if scores is None:
+            return int(ident[6:]) - 1
     return n
