@@ -10,7 +10,7 @@ config.load_config()
 
 MAX_TEAMS_PER_MATCH = 4
 
-match_data = talk.command_yaml('list-matches 2013 2014')
+match_data = talk.command_yaml('list-matches 2013-01-01 2014-01-01')
 match_data = match_data['matches']
 
 date = None

@@ -8,7 +8,7 @@ from display_utils import get_team_name, get_delayed_time
 config.load_config()
 
 
-match_data = talk.command_yaml('list-matches 2013 2014')
+match_data = talk.command_yaml('list-matches 2013-01-01 2014-01-01')
 match_data = match_data['matches']
 
 print '<table><tr>'
