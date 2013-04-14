@@ -67,6 +67,16 @@ def get_sorted_league_points():
     sorted_tuples = gen_pts_tla(pts_list, pts_map)
     return sorted_tuples
 
+def get_all_league_rows(row_limit = None):
+    tuples = get_sorted_league_points()
+    row = 1
+    for pts, tla in tuples:
+        pos = row
+        yield pts, tla, pos
+        if row_limit is not None and row >= row_limit:
+            break
+        row += 1
+
 def last_scored_match():
 
     for n in range(1, TOTAL_MATCHES + 1):

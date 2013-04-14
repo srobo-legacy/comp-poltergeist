@@ -18,15 +18,15 @@ Up to date with scores from match {0}
 | Position | Points | Team |
 |----------|--------|------|'''.format(last_scored_match)
 
-pos = 1
 team_list = display_utils.get_team_list()
-sorted_tuples = display_utils.get_sorted_league_points()
+sorted_tuples = display_utils.get_all_league_rows()
 
-for pts, tla in sorted_tuples:
+row = 1
+for pts, tla, pos in sorted_tuples:
     team = display_utils.format_name(tla, team_list[tla])
 
-    if pos == QUALIFYING_TEAMS + 1:
+    if row == QUALIFYING_TEAMS + 1:
         print '| - | - | - |'
 
     print "| {0} | {1} | {2} |".format(pos, pts, team)
-    pos += 1
+    row += 1
