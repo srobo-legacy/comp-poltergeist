@@ -70,8 +70,13 @@ def get_sorted_league_points():
 def get_all_league_rows(row_limit = None):
     tuples = get_sorted_league_points()
     row = 1
+    last_pts = 0
     for pts, tla in tuples:
         pos = row
+        if last_pts == pts:
+            pos = ''
+        else:
+            last_pts = pts
         yield pts, tla, pos
         if row_limit is not None and row >= row_limit:
             break
