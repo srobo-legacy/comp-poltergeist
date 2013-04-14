@@ -24,6 +24,8 @@ all_scores = display_utils.get_all_match_scores()
 scores_map = defaultdict(lambda: 0)
 
 for ident, scores in all_scores.iteritems():
+    if scores is None:
+        continue
     for tla, pts in scores.iteritems():
         scores_map[tla] += pts
 
