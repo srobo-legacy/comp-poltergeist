@@ -7,17 +7,6 @@ run: false
 # Control port
 control_port: 18333
 
-# IRC control configuration
-irc:
-    server: irc.freenode.net
-    port: 6667
-    nick: compdman
-    user: compdman
-    gecos: Compd Controller
-    channel: "#srobo-ops"
-    key: chanpass
-    enable: false
-
 # Redis server configuration
 # The redis server is run by compd
 # so don't change these unless you know what you are doing
