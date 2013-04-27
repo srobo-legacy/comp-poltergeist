@@ -1,6 +1,6 @@
 
-from datetime import timedelta, date
 from collections import defaultdict
+from datetime import date, datetime, timedelta
 
 import talk
 
@@ -104,3 +104,57 @@ def last_scored_match():
         if scores is None:
             return int(ident[6:]) - 1
     return n
+
+class HTMLSchedule(object):
+    def __init__(self, schedule):
+        self._schedule = schedule
+
+    def get_header(self, date):
+        out = '\n<h2>{0}</h2>'.format(date.strftime('%A, %d %B %Y'))
+        out += '\n<table class="match-schedule"><thead><tr>'
+        out += '\n<th> Time </th><th> Match </th><th> Zone 0 </th><th> Zone 1 </th><th> Zone 2 </th><th> Zone 3 </th>'
+        out += '\n</tr></thead><tbody>'
+        return out
+
+    def get_tail(self):
+        return '</tbody></table>'
+
+    def get_team_cell(self, team_id, show_name = False):
+        name = get_team_name(team_id)
+        if show_name:
+            id_html = '<span class="team-id">{0}</span>'.format(team_id)
+            name_html = '<span class="team-name">{0}</span>'.format(name)
+            text = format_name(id_html, name_html)
+        else:
+            text = '<span class="team-id" title="{1}">{0}</span>'.format(team_id, name)
+
+        return '<td class="team-{0}">{1}</td>'.format(team_id, text)
+
+    def get_row(self, time, num, teams, show_team_name = False):
+        out = '\n<tr class="match-{0}">'.format(int(num))
+        cells = [self.get_team_cell(tid, show_team_name) for tid in teams]
+        out += "\n\t<td>{0}</td><td>{1}</td>{2}".format(time, num, ''.join(cells))
+        out += "\n</tr>"
+        return out
+
+    def get_all(self):
+        date = None
+        output = '<h1>Match Schedule</h1>'
+
+        for ident, stamp in self._schedule:
+            dt = datetime.fromtimestamp(stamp)
+            dt = get_delayed_time(dt)
+            teams_data = talk.command_yaml('get-match-teams {0}'.format(ident))
+            #print teams_data
+            team_ids = teams_data['teams']
+            this_date = dt.date()
+            if date != this_date:
+                if date is not None:
+                    output += self.get_tail()
+                date = this_date
+                output += self.get_header(date)
+            num = ident[6:]
+            output += self.get_row(dt.time(), num, team_ids, True)
+
+        output += self.get_tail()
+        return output
