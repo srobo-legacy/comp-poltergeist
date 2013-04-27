@@ -3,7 +3,7 @@ import config
 
 import talk
 from datetime import datetime
-from display_utils import get_team_name, get_delayed_time
+from display_utils import get_team_name, format_name, get_delayed_time
 
 config.load_config()
 
@@ -39,7 +39,7 @@ for ident, stamp in match_data:
     teams_data = talk.command_yaml('get-match-teams {0}'.format(ident))
     #print teams_data
     team_ids = teams_data['teams']
-    teams = [get_team_name(t) for t in team_ids]
+    teams = [format_name(t, get_team_name(t)) for t in team_ids]
     this_date = dt.date()
     if date != this_date:
         if date is not None:
