@@ -6,3 +6,8 @@ table.match-schedule tbody tr:nth-child(odd) {
 table.match-schedule tbody tr:hover {
 	background-color: #F7DAC2;
 }
+
+table.match-schedule.locations tbody td.concourse  { background-color: #FF99bb; }
+table.match-schedule.locations tbody td.level-2    { background-color: lightYellow; }
+table.match-schedule.locations tbody td.level-3    { background-color: lightGreen; }
+table.match-schedule.locations tbody td.pod-1      { background-color: lightBlue; }
