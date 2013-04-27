@@ -106,8 +106,13 @@ def last_scored_match():
     return n
 
 class HTMLSchedule(object):
-    def __init__(self, schedule):
+    def __init__(self, schedule, locations = None):
         self._schedule = schedule
+        self._locations = locations
+
+    def to_html_id(self, string):
+        # Convert a string into something that could be an html id. Badly.
+        return string.strip().lower().replace(' ', '-')
 
     def get_header(self, date):
         out = '\n<h2>{0}</h2>'.format(date.strftime('%A, %d %B %Y'))
@@ -128,7 +133,12 @@ class HTMLSchedule(object):
         else:
             text = '<span class="team-id" title="{1}">{0}</span>'.format(team_id, name)
 
-        return '<td class="team-{0}">{1}</td>'.format(team_id, text)
+        clazz = 'team-{0}'.format(team_id)
+        if self._locations is not None:
+            loc = self._locations[team_id]
+            clazz += ' {0}'.format(self.to_html_id(loc))
+
+        return '<td class="{0}">{1}</td>'.format(clazz, text)
 
     def get_row(self, time, num, teams, show_team_name = False):
         out = '\n<tr class="match-{0}">'.format(int(num))
