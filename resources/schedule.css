@@ -1,0 +1,8 @@
+
+table.match-schedule tbody tr:nth-child(odd) {
+	background-color: #e8e8e8;
+}
+
+table.match-schedule tbody tr:hover {
+	background-color: #F7DAC2;
+}
