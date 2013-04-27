@@ -114,6 +114,38 @@ class HTMLSchedule(object):
         # Convert a string into something that could be an html id. Badly.
         return string.strip().lower().replace(' ', '-')
 
+    def get_locations_button(self):
+        if self._locations is None:
+            return ''
+
+        return '''<script type="text/javascript">
+var locations = false;
+function toggle_locations(src) {
+	sched_tables = document.querySelectorAll("table.match-schedule");
+	for (var i=0; i < sched_tables.length; i++) {
+		var classes = sched_tables[i].className;
+		if (!locations) {
+			classes += " locations";
+		} else {
+			classes = classes.replace('locations', '');
+		}
+		sched_tables[i].className = classes;
+	}
+	locations = !locations;
+	if (locations) {
+		src.textContent = "Hide Locations";
+	} else {
+		src.textContent = "Show Locations";
+	}
+}
+</script>
+
+<button
+	style="cursor: pointer; float: right; margin-right: 20px;"
+	onclick="toggle_locations(this)"
+	>Show Locations</button>
+'''
+
     def get_header(self, date):
         out = '\n<h2>{0}</h2>'.format(date.strftime('%A, %d %B %Y'))
         out += '\n<table class="match-schedule"><thead><tr>'
@@ -150,6 +182,7 @@ class HTMLSchedule(object):
     def get_all(self):
         date = None
         output = '<h1>Match Schedule</h1>'
+        output += self.get_locations_button()
 
         for ident, stamp in self._schedule:
             dt = datetime.fromtimestamp(stamp)
