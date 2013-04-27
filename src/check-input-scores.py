@@ -2,7 +2,6 @@
 from datetime import datetime
 import sys
 
-from display_utils import get_team_name
 import config
 import talk
 

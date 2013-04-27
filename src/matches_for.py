@@ -4,7 +4,7 @@ import sys
 
 import config
 import talk
-from display_utils import get_team_name, get_delayed_time
+from display_utils import get_delayed_time
 
 config.load_config()
 
