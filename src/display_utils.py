@@ -182,7 +182,7 @@ function toggle_locations(src) {
         out += "\n</tr>"
         return out
 
-    def get_table(self, headings = True, full_names = True, dt_filter = None):
+    def get_table(self, headings = True, full_names = True, dt_filter = None, team_filter = None):
         date = None
         output = ''
 
@@ -194,6 +194,8 @@ function toggle_locations(src) {
             teams_data = talk.command_yaml('get-match-teams {0}'.format(ident))
             #print teams_data
             team_ids = teams_data['teams']
+            if team_filter and not team_filter(team_ids):
+                continue
             this_date = dt.date()
             if date != this_date:
                 if date is not None:
