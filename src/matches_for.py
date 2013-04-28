@@ -8,6 +8,8 @@ from display_utils import get_delayed_time
 
 config.load_config()
 
+req_team = sys.argv[1]
+
 match_data = talk.command_yaml('list-matches 2013-01-01 2014-01-01')
 match_data = match_data['matches']
 
@@ -17,7 +19,7 @@ for ident, stamp in match_data:
     teams_data = talk.command_yaml('get-match-teams {0}'.format(ident))
     #print teams_data
     team_ids = teams_data['teams']
-    if not sys.argv[1] in team_ids:
+    if not req_team in team_ids:
         continue
 
     num = ident[6:]
