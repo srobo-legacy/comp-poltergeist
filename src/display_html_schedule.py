@@ -3,7 +3,7 @@ import config
 
 import talk
 from datetime import datetime
-from display_utils import get_delayed_time
+from display_utils import HTMLSchedule
 
 config.load_config()
 
@@ -11,35 +11,20 @@ config.load_config()
 match_data = talk.command_yaml('list-matches 2013-01-01 2014-01-01')
 match_data = match_data['matches']
 
-print '<table><tr>'
-print '<th> Time </th><th> Match </th><th> Zone 0 </th><th> Zone 1 </th><th> Zone 2 </th><th> Zone 3 </th>'
-
 MAX_MATCHES = 10
 
 now = datetime.now()
 date = now.date()
+match_count = 0
 
-i = 0
+def dt_filter(then):
+    global date, match_count
+    if then.date() != date:
+        return False
+    if then < now:
+        return False
+    match_count += 1
+    return match_count <= MAX_MATCHES
 
-for ident, stamp in match_data:
-    dt = datetime.fromtimestamp(stamp)
-    dt = get_delayed_time(dt)
-    if dt < now:
-        continue
-    teams_data = talk.command_yaml('get-match-teams {0}'.format(ident))
-
-    team_ids = teams_data['teams']
-    this_date = dt.date()
-    # Don't show the following day
-    if date != this_date:
-        break
-
-    if i >= MAX_MATCHES:
-        break
-    i += 1
-
-    num = ident[6:]
-    print '</tr><tr>'
-    print "<td> {0} </td><td> {1} </td><td> {2} </td>".format(dt.time(), num, ' </td><td> '.join(team_ids))
-
-print '</tr></table>'
+html_schedule = HTMLSchedule(match_data)
+print html_schedule.get_table(headings = False, full_names = False, dt_filter = dt_filter)

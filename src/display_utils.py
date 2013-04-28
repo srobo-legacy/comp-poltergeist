@@ -182,13 +182,15 @@ function toggle_locations(src) {
         out += "\n</tr>"
         return out
 
-    def get_table(self, headings = True):
+    def get_table(self, headings = True, full_names = True, dt_filter = None):
         date = None
         output = ''
 
         for ident, stamp in self._schedule:
             dt = datetime.fromtimestamp(stamp)
             dt = get_delayed_time(dt)
+            if dt_filter and not dt_filter(dt):
+                continue
             teams_data = talk.command_yaml('get-match-teams {0}'.format(ident))
             #print teams_data
             team_ids = teams_data['teams']
@@ -201,7 +203,7 @@ function toggle_locations(src) {
                     output += self.get_header(date)
                 output += self.get_table_head()
             num = ident[6:]
-            output += self.get_row(dt.time(), num, team_ids, True)
+            output += self.get_row(dt.time(), num, team_ids, full_names)
 
         output += self.get_tail()
         return output
