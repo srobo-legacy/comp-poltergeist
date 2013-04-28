@@ -138,6 +138,20 @@ class Schedule(object):
     def __iter__(self):
         return iter(self._schedule)
 
+class FilteredSchedule(object):
+    def __init__(self, schedule, when_filter = None, team_filter = None):
+        self._schedule = schedule
+        self._when_filter = when_filter
+        self._team_filter = team_filter
+
+    def __iter__(self):
+        for match in self._schedule:
+            if self._when_filter and not self._when_filter(match.when):
+                continue
+            if self._team_filter and not self._team_filter(match.teams):
+                continue
+            yield match
+
 class HTMLSchedule(object):
     def __init__(self, schedule, locations = None):
         self._schedule = schedule
@@ -219,13 +233,9 @@ function toggle_locations(src) {
         date = None
         output = ''
 
-        for match in self._schedule:
+        filtered_schedule = FilteredSchedule(self._schedule, dt_filter, team_filter)
+        for match in filtered_schedule:
             dt = match.when
-            if dt_filter and not dt_filter(dt):
-                continue
-            team_ids = match.teams
-            if team_filter and not team_filter(team_ids):
-                continue
             this_date = dt.date()
             if date != this_date:
                 if date is not None:
@@ -234,7 +244,7 @@ function toggle_locations(src) {
                 if headings:
                     output += self.get_header(date)
                 output += self.get_table_head()
-            output += self.get_row(dt.time(), match.num, team_ids, full_names)
+            output += self.get_row(dt.time(), match.num, match.teams, full_names)
 
         output += self.get_tail()
         return output
