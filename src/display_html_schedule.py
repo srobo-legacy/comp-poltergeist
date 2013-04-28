@@ -3,7 +3,7 @@ import config
 
 import talk
 from datetime import datetime
-from display_utils import HTMLSchedule
+from display_utils import HTMLSchedule, Schedule
 
 config.load_config()
 
@@ -26,5 +26,6 @@ def dt_filter(then):
     match_count += 1
     return match_count <= MAX_MATCHES
 
-html_schedule = HTMLSchedule(match_data)
+schedule = Schedule(match_data)
+html_schedule = HTMLSchedule(schedule)
 print html_schedule.get_table(headings = False, full_names = False, dt_filter = dt_filter)

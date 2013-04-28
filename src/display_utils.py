@@ -105,6 +105,16 @@ def last_scored_match():
             return int(ident[6:]) - 1
     return n
 
+class Schedule(object):
+    def __init__(self, schedule):
+        self._schedule = schedule
+
+    def __iter__(self):
+        for ident, stamp in self._schedule:
+            dt = datetime.fromtimestamp(stamp)
+            dt = get_delayed_time(dt)
+            yield ident, dt
+
 class HTMLSchedule(object):
     def __init__(self, schedule, locations = None):
         self._schedule = schedule
@@ -186,9 +196,7 @@ function toggle_locations(src) {
         date = None
         output = ''
 
-        for ident, stamp in self._schedule:
-            dt = datetime.fromtimestamp(stamp)
-            dt = get_delayed_time(dt)
+        for ident, dt in self._schedule:
             if dt_filter and not dt_filter(dt):
                 continue
             teams_data = talk.command_yaml('get-match-teams {0}'.format(ident))

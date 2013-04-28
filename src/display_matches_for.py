@@ -1,7 +1,7 @@
 
 import sys
 
-from display_utils import HTMLSchedule
+from display_utils import HTMLSchedule, Schedule
 import config
 import talk
 
@@ -31,7 +31,8 @@ def get_team_filter(filter_team):
         return filter_team in teams
     return team_filter
 
-html_schedule = HTMLSchedule(match_data)
+schedule = Schedule(match_data)
+html_schedule = HTMLSchedule(schedule)
 
 if req_team == ALL_OPT:
     for team in team_ids:
