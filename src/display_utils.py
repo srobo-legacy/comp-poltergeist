@@ -148,7 +148,10 @@ function toggle_locations(src) {
 
     def get_header(self, date):
         out = '\n<h2>{0}</h2>'.format(date.strftime('%A, %d %B %Y'))
-        out += '\n<table class="match-schedule"><thead><tr>'
+        return out
+
+    def get_table_head(self):
+        out = '\n<table class="match-schedule"><thead><tr>'
         out += '\n<th> Time </th><th> Match </th><th> Zone 0 </th><th> Zone 1 </th><th> Zone 2 </th><th> Zone 3 </th>'
         out += '\n</tr></thead><tbody>'
         return out
@@ -179,10 +182,9 @@ function toggle_locations(src) {
         out += "\n</tr>"
         return out
 
-    def get_all(self):
+    def get_table(self, headings = True):
         date = None
-        output = '<h1>Match Schedule</h1>'
-        output += self.get_locations_button()
+        output = ''
 
         for ident, stamp in self._schedule:
             dt = datetime.fromtimestamp(stamp)
@@ -195,9 +197,18 @@ function toggle_locations(src) {
                 if date is not None:
                     output += self.get_tail()
                 date = this_date
-                output += self.get_header(date)
+                if headings:
+                    output += self.get_header(date)
+                output += self.get_table_head()
             num = ident[6:]
             output += self.get_row(dt.time(), num, team_ids, True)
 
         output += self.get_tail()
+        return output
+
+    def get_all(self):
+        date = None
+        output = '<h1>Match Schedule</h1>'
+        output += self.get_locations_button()
+        output += self.get_table()
         return output
