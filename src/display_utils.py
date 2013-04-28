@@ -105,15 +105,38 @@ def last_scored_match():
             return int(ident[6:]) - 1
     return n
 
+class Match(object):
+    def __init__(self, stamp, ident):
+        dt = datetime.fromtimestamp(stamp)
+        self._when = get_delayed_time(dt)
+        self._ident = ident
+        self._teams = None
+
+    @property
+    def when(self):
+        return self._when
+
+    @property
+    def ident(self):
+        return self._ident
+
+    @property
+    def num(self):
+        return self._ident[6:]
+
+    @property
+    def teams(self):
+        if not self._teams:
+            teams_data = talk.command_yaml('get-match-teams {0}'.format(self._ident))
+            self._teams = teams_data['teams']
+        return self._teams
+
 class Schedule(object):
     def __init__(self, schedule):
-        self._schedule = schedule
+        self._schedule = [Match(stamp, ident) for ident, stamp in schedule]
 
     def __iter__(self):
-        for ident, stamp in self._schedule:
-            dt = datetime.fromtimestamp(stamp)
-            dt = get_delayed_time(dt)
-            yield ident, dt
+        return iter(self._schedule)
 
 class HTMLSchedule(object):
     def __init__(self, schedule, locations = None):
@@ -196,12 +219,11 @@ function toggle_locations(src) {
         date = None
         output = ''
 
-        for ident, dt in self._schedule:
+        for match in self._schedule:
+            dt = match.when
             if dt_filter and not dt_filter(dt):
                 continue
-            teams_data = talk.command_yaml('get-match-teams {0}'.format(ident))
-            #print teams_data
-            team_ids = teams_data['teams']
+            team_ids = match.teams
             if team_filter and not team_filter(team_ids):
                 continue
             this_date = dt.date()
@@ -212,8 +234,7 @@ function toggle_locations(src) {
                 if headings:
                     output += self.get_header(date)
                 output += self.get_table_head()
-            num = ident[6:]
-            output += self.get_row(dt.time(), num, team_ids, full_names)
+            output += self.get_row(dt.time(), match.num, team_ids, full_names)
 
         output += self.get_tail()
         return output
