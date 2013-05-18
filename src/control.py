@@ -44,6 +44,15 @@ import re
 from docopt import docopt, DocoptExit
 
 class CommandError(Exception):
+    def __init__(self, message = None):
+        Exception.__init__(self, message)
+
+class CommandMissingError(CommandError):
+    def __init__(self):
+        message = "The requested command has not been registered"
+        CommandError.__init__(self, message)
+
+class CommandParseError(CommandError):
     pass
 
 def parse(cmd):
@@ -53,7 +62,7 @@ def parse(cmd):
                          help = False, version = None)
         return options
     except DocoptExit:
-        raise CommandError()
+        raise CommandParseError()
 
 HANDLERS = {}
 
@@ -69,7 +78,7 @@ def dispatch(options, responder):
         if options.get(name):
             callback(responder, options)
             return
-    raise CommandError()
+    raise CommandMissingError()
 
 @handler('usage')
 def handle_usage(responder, opts):
@@ -89,14 +98,19 @@ def default_responder(output):
     print output
 
 def handle(cmd, responder = default_responder, no_auto_fail = False,
-           short_fail = False):
+           short_fail = True):
     try:
         dispatch(parse(cmd), responder)
-    except CommandError:
+    except CommandError as ce:
         if no_auto_fail:
             raise
         elif short_fail:
-            responder('Syntax error.')
+            if isinstance(ce, CommandParseError):
+                responder("Command '{0}' not recognised. Check 'usage' for accepted commands.".format(cmd))
+            elif isinstance(ce, CommandMissingError):
+                responder("No handler for '{0}' has been registered!".format(cmd))
+            else:
+              responder('Syntax error.')
         else:
             handle('usage', responder, no_auto_fail = True)
 
