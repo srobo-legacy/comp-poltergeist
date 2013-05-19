@@ -4,7 +4,7 @@ import config
 
 connection = None
 
-def run_redis_client(on_started):
+def run_redis_client(on_started = None):
     df = redis.makeConnection(config.redis['host'],
                               config.redis['port'],
                               config.redis['db'],
@@ -14,7 +14,8 @@ def run_redis_client(on_started):
     def done(pony):
         global connection
         connection = pony
-        on_started()
+        if on_started:
+            on_started()
     df.addCallback(done)
 
 def add_subscribe(key, callback):
