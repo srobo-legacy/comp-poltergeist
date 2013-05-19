@@ -3,6 +3,7 @@
 Usage:
   compctl halt
   compctl usage
+  compctl version
   compctl schedule (lunch | league | knockout | open | briefing | photo | prizes | tinker) <time>
   compctl unschedule <id>
   compctl show-schedule <from> <to>
@@ -40,7 +41,9 @@ Usage:
 """
 
 import shlex
+from subprocess import check_output, CalledProcessError
 import re
+
 from docopt import docopt, DocoptExit
 
 class CommandError(Exception):
@@ -92,6 +95,18 @@ def halt_system(responder, options):
     from twisted.internet import reactor
     responder("System going down for halt")
     reactor.stop()
+
+GIT_VERSION = None
+
+@handler('version')
+def get_version(responder, opts):
+    global GIT_VERSION
+    if not GIT_VERSION:
+        try:
+            GIT_VERSION = check_output(('git', 'describe', '--always')).strip()
+        except CalledProcessError:
+            GIT_VERSION = '?'
+    responder(GIT_VERSION)
 
 def default_responder(output):
     print output
