@@ -69,7 +69,6 @@ HANDLERS = {}
 def handler(subcommand):
     def wrapper(fn):
         HANDLERS[subcommand] = fn
-        print "Installed command: {0}".format(subcommand)
         return fn
     return wrapper
 
