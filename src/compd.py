@@ -15,7 +15,6 @@ import config
 import sys
 import control
 import control_socket
-import control_irc
 import redis_process
 import redis_client
 from twisted.internet import reactor, task
@@ -42,7 +41,6 @@ control.subscribe(log_to_stdout)
 def got_redis_client():
     print 'Connected to Redis server'
     control_socket.install_control_handler()
-    control_irc.install_irc_handler()
     print 'Loading schedule DB...'
     import schedule_db
     print 'Loading team DB...'
