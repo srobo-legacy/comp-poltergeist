@@ -13,7 +13,7 @@ match_data = match_data['matches']
 
 MAX_MATCHES = 10
 
-now = datetime.now()
+now = datetime(2013, 04, 13, hour = 15)
 date = now.date()
 match_count = 0
 

@@ -1,36 +1,23 @@
-import txredisapi as redis
-from twisted.internet import defer, reactor
+
+import redis
+
 import config
+config.load_config('config.yaml')
 
 connection = None
 
 def run_redis_client(on_started = None):
-    df = redis.makeConnection(config.redis['host'],
-                              config.redis['port'],
-                              config.redis['db'],
-                              poolsize = 8,
-                              reconnect = True,
-                              isLazy = False)
-    def done(pony):
-        global connection
-        connection = pony
-        if on_started:
-            on_started()
-    df.addCallback(done)
+    global connection
+    connection = redis.Redis(config.redis['host'],
+                             config.redis['port'],
+                             config.redis['db'])
+    if on_started:
+        on_started()
 
 def add_subscribe(key, callback):
-    class ListenerProtocol(redis.SubscriberProtocol):
-        def connectionMade(self):
-            redis.RedisProtocol.connectionMade(self)
-            self.subscribe(key)
-
-        def messageReceived(self, pattern, channel, message):
-            if not isinstance(message, int):
-                callback(message)
-
-    factory = redis.SubscriberFactory()
-    factory.protocol = ListenerProtocol
-    reactor.connectTCP(config.redis['host'],
-                       config.redis['port'],
-                       factory)
-
+    """
+    Base implementation can't subscribe to anything as it only has a
+    short-lived connection. Long-running frontends should replace this
+    function with one that actually subscribes.
+    """
+    pass

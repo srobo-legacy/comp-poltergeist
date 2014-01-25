@@ -3,7 +3,6 @@
 import redis_client
 import control
 import re
-from twisted.internet import defer
 
 class ScreenDB(object):
     """A screen database."""
@@ -24,24 +23,22 @@ class ScreenDB(object):
             redis_client.connection.delete('screen:{0}:override'.format(screen))
         redis_client.connection.publish('screen:update', 'update')
 
-    @defer.inlineCallbacks
     def list(self):
-        screens = yield redis_client.connection.keys('screen:*:mode')
+        screens = redis_client.connection.keys('screen:*:mode')
         entries = {}
         for screen in screens:
             screenID = screen.split(':')[1]
-            mode = yield redis_client.connection.get('screen:{0}:mode'.format(screenID))
-            host = yield redis_client.connection.get('screen:{0}:host'.format(screenID))
+            mode = redis_client.connection.get('screen:{0}:mode'.format(screenID))
+            host = redis_client.connection.get('screen:{0}:host'.format(screenID))
             entries[screenID] = {'mode': mode,
                                  'host': host}
-        defer.returnValue(entries)
+        return entries
 
 screens = ScreenDB()
 
 @control.handler('screen-list')
-@defer.inlineCallbacks
 def perform_screen_list(responder, options):
-    screen_list = yield screens.list()
+    screen_list = screens.list()
     for screen, settings in screen_list.iteritems():
         if settings['host'] is None:
             online_string = 'offline'
@@ -70,4 +67,3 @@ def got_screen(name):
     control.broadcast('Screen connected: {0}'.format(name))
 
 redis_client.add_subscribe('screen:connect', got_screen)
-

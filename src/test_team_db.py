@@ -2,7 +2,6 @@ import team_db
 import mock
 import redis_client
 import control
-from twisted.internet import defer
 
 def test_add():
     fake_connection = mock.Mock()
@@ -76,46 +75,36 @@ def test_update():
 
 def test_list():
     fake_connection = mock.Mock()
-    fake_keys = defer.Deferred()
-    fake_keys.callback(['team:aaa:college',
-                        'team:bbb2:college'])
+    fake_keys = ['team:aaa:college', 'team:bbb2:college']
     fake_connection.keys = mock.Mock(return_value = fake_keys)
-    did_complete = mock.Mock()
     with mock.patch('redis_client.connection', fake_connection):
-        items = team_db.roster.list()
+        actual = team_db.roster.list()
         fake_connection.keys.assert_called_once_with('team:*:college')
-        items.addCallback(did_complete)
-        did_complete.assert_called_once_with(['aaa', 'bbb2'])
+        assert actual == ['aaa', 'bbb2']
 
 def test_get():
     fake_connection = mock.Mock()
-    fake_values = defer.Deferred()
-    fake_values.callback(['College',
-                          'Name',
-                          'Notes',
-                          'yes'])
+    fake_values = ['College', 'Name', 'Notes', 'yes']
     fake_connection.mget = mock.Mock(return_value = fake_values)
-    did_complete = mock.Mock()
     with mock.patch('redis_client.connection', fake_connection):
-        info = team_db.roster.get('aaa')
+        actual = team_db.roster.get('aaa')
         fake_connection.mget.assert_called_once_with('team:aaa:college',
                                                      'team:aaa:name',
                                                      'team:aaa:notes',
                                                      'team:aaa:present')
-        info.addCallback(did_complete)
-        did_complete.assert_called_once_with({'college': 'College',
-                                              'name': 'Name',
-                                              'notes': 'Notes',
-                                              'present': True})
+        expected = {'college': 'College',
+                    'name': 'Name',
+                    'notes': 'Notes',
+                    'present': True}
+        assert actual == expected
 
 def test_append_notes():
     fake_updater = mock.Mock()
     fake_responder = mock.Mock()
-    fake_values = defer.Deferred()
-    fake_values.callback({'college': 'there',
-                           'name': 'them',
-                           'notes': 'Initial Notes.',
-                           'present': True })
+    fake_values = {'college': 'there',
+                   'name': 'them',
+                   'notes': 'Initial Notes.',
+                   'present': True }
     fake_getter = mock.Mock(return_value = fake_values)
     with mock.patch('team_db.roster.get', fake_getter), \
          mock.patch('team_db.roster.update', fake_updater):

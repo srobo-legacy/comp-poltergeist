@@ -2,7 +2,6 @@
 
 import redis_client
 import control
-from twisted.internet import defer
 import re
 import yaml
 
@@ -62,35 +61,34 @@ class TeamDB(object):
         redis_client.connection.set('team:{0}:present'.format(tla), 'no')
         redis_client.connection.publish('team:update', 'update')
 
-    @defer.inlineCallbacks
     def list(self):
         # Take a census of team:*:college keys
-        keys = yield redis_client.connection.keys('team:*:college')
-        defer.returnValue([re.match('team:([a-zA-Z0-9]*):college', key).group(1)
-                             for key in keys])
+        keys = redis_client.connection.keys('team:*:college')
+        teams = [re.match('team:([a-zA-Z0-9]*):college', key).group(1)
+                             for key in keys]
+        return teams
 
-    @defer.inlineCallbacks
     def get(self, team):
         # Return team info dict
         college, name, notes, present = \
-            yield redis_client.connection.mget(*['team:{0}:{1}'.format(team, x)
+            redis_client.connection.mget(*['team:{0}:{1}'.format(team, x)
                                                    for x in ('college',
                                                              'name',
                                                              'notes',
                                                              'present')])
-        defer.returnValue({'college': college,
-                           'name': name,
-                           'notes': notes,
-                           'present': present == 'yes'})
+        info = {'college': college,
+                'name': name,
+                'notes': notes,
+                'present': present == 'yes'}
+        return info
 
 roster = TeamDB()
 yaml_opt = '--yaml'
 
 @control.handler('team')
-@defer.inlineCallbacks
 def perform_team(responder, options):
     tla = options['<tla>']
-    team = yield roster.get(options['<tla>'])
+    team = roster.get(options['<tla>'])
 
     if options.get(yaml_opt, False):
         responder(yaml.dump({'team': team}))
@@ -103,9 +101,8 @@ def perform_team(responder, options):
         responder(str(team['notes']))
 
 @control.handler('list-teams')
-@defer.inlineCallbacks
 def perform_list_teams(responder, options):
-    list = yield roster.list()
+    list = roster.list()
 
     if not list:
         if options.get(yaml_opt, False):
@@ -116,7 +113,7 @@ def perform_list_teams(responder, options):
 
     names_list = []
     for tla in list:
-        info = yield roster.get(tla)
+        info = roster.get(tla)
         if not options.get(yaml_opt, False):
             responder('{0}: {1}'.format(tla, info['name']))
         else:
@@ -167,9 +164,8 @@ def perform_set_team_notes(responder, options):
     responder('Team {0} updated.'.format(options['<tla>']))
 
 @control.handler('append-note')
-@defer.inlineCallbacks
 def perform_append_notes(responder, options):
-    team = yield roster.get(options['<tla>'])
+    team = roster.get(options['<tla>'])
     notes = team['notes']
     # add a full stop if there isn't one
     if notes == None:

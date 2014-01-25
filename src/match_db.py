@@ -4,7 +4,6 @@ from uuid import uuid4
 import redis_client
 import control
 import re
-from twisted.internet import defer
 import yaml
 
 from utils import format_time, parse_time
@@ -28,23 +27,21 @@ class MatchDB(object):
         redis_client.connection.zrem('match:schedule', name)
         redis_client.connection.publish('match:schedule', 'update')
 
-    @defer.inlineCallbacks
     def set_teams(self, name, teams):
         """Set the teams for a match."""
-        yield redis_client.connection.delete('match:matches:{0}:teams'.format(name))
+        redis_client.connection.delete('match:matches:{0}:teams'.format(name))
         if teams is not None:
             for team in teams:
-                yield redis_client.connection.rpush('match:matches:{0}:teams'.format(name),
+                redis_client.connection.rpush('match:matches:{0}:teams'.format(name),
                                                     team)
         redis_client.connection.publish('match:schedule', 'update')
 
 
-    @defer.inlineCallbacks
     def get_teams(self, name):
         """Get the teams for a match."""
-        n_teams = yield redis_client.connection.llen('match:matches:{0}:teams'.format(name))
-        teams = yield redis_client.connection.lrange('match:matches:{0}:teams'.format(name), 0, n_teams-1)
-        defer.returnValue(teams)
+        n_teams = redis_client.connection.llen('match:matches:{0}:teams'.format(name))
+        teams = redis_client.connection.lrange('match:matches:{0}:teams'.format(name), 0, n_teams-1)
+        return teams
 
     def matches_between(self, start, end):
         """Get events between a given start and end point, specified in
@@ -78,10 +75,9 @@ def perform_set_match_teams(responder, options):
     responder('Teams set.')
 
 @control.handler('get-match-teams')
-@defer.inlineCallbacks
 def perform_get_match_teams(responder, options):
     match = options['<match-id>']
-    teams = yield matches.get_teams(match)
+    teams = matches.get_teams(match)
     if options.get(yaml_opt, False):
         responder(yaml.dump({'teams': teams}))
     else:
@@ -97,11 +93,10 @@ def perform_clear_match_teams(responder, options):
     responder('Teams cleared.')
 
 @control.handler('list-matches')
-@defer.inlineCallbacks
 def perform_list_matches(responder, options):
     fr = parse_time(options['<from>'])
     to = parse_time(options['<to>'])
-    output = yield matches.matches_between(fr, to)
+    output = matches.matches_between(fr, to)
 
     if options.get(yaml_opt, False):
         responder(yaml.dump({'matches': output}))

@@ -1,7 +1,6 @@
 """compctl
 
 Usage:
-  compctl halt
   compctl usage
   compctl version
   compctl schedule (lunch | league | knockout | open | briefing | photo | prizes | tinker) <time>
@@ -89,12 +88,6 @@ def handle_usage(responder, opts):
         match = regex.match(line)
         if match:
             responder('Usage: {0}'.format(match.group(1)))
-
-@handler('halt')
-def halt_system(responder, options):
-    from twisted.internet import reactor
-    responder("System going down for halt")
-    reactor.stop()
 
 GIT_VERSION = None
 

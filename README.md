@@ -1,38 +1,22 @@
-```
-                                        _
-                                       ( )
-      ___    _     ___ ___   _ _      _| |
-    /'___) /'_`\ /' _ ` _ `\( '_`\  /'_` |
-   ( (___ ( (_) )| ( ) ( ) || (_) )( (_| |
-   `\____)`\___/'(_) (_) (_)| ,__/'`\__,_)
-                            | |
-                            (_)
-```
+# Poltergeist
 
-A competition daemon for Student Robotics.
-
-Many Scarzies died to bring us this implementation.
-
-History
-=======
-
-This will be the fourth implementation of compd in as many years. Hopefully this one, being simpler than the others, will actually stick.
+A competition database interface for [Student Robotics](https://www.studentrobotics.org).
 
 Getting Started
 ===============
 
-To install:
+Pre-reqs:
 
-1. Install redis, version 2.6 or later
-2. Install python development tooling (via, eg, *sudo apt-get install python-dev*)
-3. Install virtualenv (via, eg, *sudo easy_install virtualenv*)
-4. Run *./install*
+* redis, version 2.6 or later
+* redis-py
+* docopt
 
-All other dependencies, through the magic of virtualenv, are installed locally - in the *dep* directory as a matter of fact.
+Since the poltergeist library uses a redis instance as its datastore, a
+redis-server needs to be running for poltergeist to do anything useful.
 
-To run, use *./run*.
-
-To develop, enter the virtualenv using *./shell*.
+For developing, you can start the redis server using `./start-redis`, and
+stop it using `./stop-redis`. Production environments are expected to run
+the redis server as a service or similar.
 
 Interfaces
 ==========
@@ -53,6 +37,7 @@ that can be used instead:
 Credit
 ======
 
-This implementation done through effective slave labour by Alistair Lynn.
+This is a fork of Alistair Lynn's compd.
 
-With thanks to Rob Spanton, Scarzy, Sam Phippen, Edd Seabrook and Ben Clive for ideas and work on the previous iterations.
+With thanks to Rob Spanton, Scarzy, Sam Phippen, Edd Seabrook and Ben Clive
+ for ideas and work on the previous iterations of compd.

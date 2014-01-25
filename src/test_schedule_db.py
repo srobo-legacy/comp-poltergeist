@@ -2,7 +2,6 @@ import schedule_db
 import mock
 import redis_client
 import control
-from twisted.internet import defer
 
 def test_new():
     uuid_handler = mock.Mock(return_value = 'eyes')
@@ -77,23 +76,18 @@ def test_command_schedule():
 
 def test_command_show_schedule():
     responder = mock.Mock()
-    df = defer.Deferred()
-    events_between = mock.Mock(return_value = df)
+    events_between = mock.Mock(return_value = [('eyes', 10*3600)])
     with mock.patch('schedule_db.schedule.events_between', events_between):
         control.handle('show-schedule moo 12:00', responder)
         responder.assert_called_once_with("Sorry, I didn't understand that time")
         responder.reset_mock()
         control.handle('show-schedule 9:00 13:00', responder)
         events_between.assert_called_once_with(9*3600, 13*3600)
-        df.callback([('eyes', 10*3600)])
         responder.assert_called_once_with('10:00:00 - eyes')
         responder.reset_mock()
-    df = defer.Deferred()
-    events_between = mock.Mock(return_value = df)
+
+    events_between = mock.Mock(return_value = [])
     with mock.patch('schedule_db.schedule.events_between', events_between):
         control.handle('show-schedule 9:00 13:00', responder)
         events_between.assert_called_once_with(9*3600, 13*3600)
-        df.callback([])
         responder.assert_called_once_with('No events in that time period')
-
-

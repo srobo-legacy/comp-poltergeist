@@ -6,7 +6,6 @@ Usage:
 Options:
   -h --help                 Display this help.
   --yaml                    Call the command with a --yaml option
-  -c <file> --config <file> Use an alternative config.yaml.
 """
 
 from docopt import docopt
@@ -18,8 +17,6 @@ import talk
 import config
 
 options = docopt(__doc__)
-
-config.load_config(options['--config'])
 
 cmd_details = options['<command-detail>']
 if options['--yaml']:
