@@ -22,9 +22,8 @@ class ScheduleDB(object):
         pass
 
     def create_event(self, time, type_):
-        """Schedule an event in the day. time should be given as a second
-        offset from the start of the day, and type_ should be one of
-        EVENT_TYPES.
+        """Schedule an event in the day. time should be given as a unix
+        timestamp, and type_ should be one of EVENT_TYPES.
 
         Returns the ID of the event."""
         if type_ not in EVENT_TYPES:
@@ -46,7 +45,7 @@ class ScheduleDB(object):
         """Get events between a given start and end point, specified in
         seconds from the start of the day.
 
-        Returns a Twisted Deferred on (id, time) pairs."""
+        Returns a list of (id, time) pairs."""
         return redis_client.connection.zrangebyscore('comp:schedule',
                                                      start,
                                                      end,

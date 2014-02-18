@@ -1,4 +1,4 @@
-"""Day schedule database."""
+"""Match schedule database."""
 
 from uuid import uuid4
 import redis_client
@@ -15,14 +15,15 @@ class MatchDB(object):
         pass
 
     def create_match(self, name, time, format = 'league'):
-        """Schedule a match."""
+        """Schedule a match. name should be a unique idenitifier for the
+        match, time should be a unix timestamp for the start of the match."""
         redis_client.connection.set('match:matches:{0}:format'.format(name),
                                     format)
         redis_client.connection.zadd('match:schedule', time, name)
         redis_client.connection.publish('match:schedule', 'update')
 
     def cancel_match(self, name):
-        """Cancel an event in the day's schedule."""
+        """Cancel a match."""
         redis_client.connection.delete('match:matches:{0}:format'.format(name))
         redis_client.connection.zrem('match:schedule', name)
         redis_client.connection.publish('match:schedule', 'update')
@@ -44,10 +45,10 @@ class MatchDB(object):
         return teams
 
     def matches_between(self, start, end):
-        """Get events between a given start and end point, specified in
-        seconds from the start of the day.
+        """Get events between a given start and end point, specified as
+        unix timestamps.
 
-        Returns a Twisted Deferred on (name, time) pairs."""
+        Returns a list of (name, time) pairs."""
         return redis_client.connection.zrangebyscore('match:schedule',
                                                      start,
                                                      end,
