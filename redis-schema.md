@@ -80,5 +80,5 @@ The name of the given team.
 Some notes about the given team.
 
 ## `team:<team-id>:present`
-A value indicating whether or not the team has turned up to the competition.
-Either "yes" or "no". TODO: use a boolean here!
+A boolean value indicating whether or not the team has turned up to the
+competition.

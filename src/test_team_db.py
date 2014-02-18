@@ -18,7 +18,7 @@ def test_add():
                                               mock.call('team:aaa:notes',
                                                         ''),
                                               mock.call('team:aaa:present',
-                                                        'no')],
+                                                        False)],
                                              any_order = True)
         fake_connection.publish.assert_called_once_with('team:update', 'update')
 
@@ -42,7 +42,7 @@ def test_mark_present():
     with mock.patch('redis_client.connection', fake_connection):
         team_db.roster.mark_present('aaa')
         fake_connection.set.assert_called_once_with('team:aaa:present',
-                                                    'yes')
+                                                    True)
         fake_connection.publish.assert_called_once_with('team:update', 'update')
 
 def test_mark_absent():
@@ -52,7 +52,7 @@ def test_mark_absent():
     with mock.patch('redis_client.connection', fake_connection):
         team_db.roster.mark_absent('aaa')
         fake_connection.set.assert_called_once_with('team:aaa:present',
-                                                    'no')
+                                                    False)
         fake_connection.publish.assert_called_once_with('team:update', 'update')
 
 def test_update():
@@ -84,7 +84,7 @@ def test_list():
 
 def test_get():
     fake_connection = mock.Mock()
-    fake_values = ['College', 'Name', 'Notes', 'yes']
+    fake_values = ['College', 'Name', 'Notes', True]
     fake_connection.mget = mock.Mock(return_value = fake_values)
     with mock.patch('redis_client.connection', fake_connection):
         actual = team_db.roster.get('aaa')

@@ -22,8 +22,7 @@ class TeamDB(object):
         redis_client.connection.set('team:{0}:notes'.format(tla),
                                     '')
         # Fill in presence when teams arrive
-        redis_client.connection.set('team:{0}:present'.format(tla),
-                                    'no')
+        redis_client.connection.set('team:{0}:present'.format(tla), False)
         redis_client.connection.publish('team:update', 'update')
 
     def delete(self, tla):
@@ -52,13 +51,13 @@ class TeamDB(object):
     def mark_present(self, tla):
         """Mark a given team present."""
         # TODO: check the team actually exists
-        redis_client.connection.set('team:{0}:present'.format(tla), 'yes')
+        redis_client.connection.set('team:{0}:present'.format(tla), True)
         redis_client.connection.publish('team:update', 'update')
 
     def mark_absent(self, tla):
         """Mark a given team absent."""
         # TODO: check the team actually exists
-        redis_client.connection.set('team:{0}:present'.format(tla), 'no')
+        redis_client.connection.set('team:{0}:present'.format(tla), False)
         redis_client.connection.publish('team:update', 'update')
 
     def list(self):
@@ -79,7 +78,7 @@ class TeamDB(object):
         info = {'college': college,
                 'name': name,
                 'notes': notes,
-                'present': present == 'yes'}
+                'present': present}
         return info
 
 roster = TeamDB()
