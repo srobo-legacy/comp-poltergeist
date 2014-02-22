@@ -2,7 +2,7 @@
 import redis
 
 import config
-config.load_config('config.yaml')
+#config.load_config('config.yaml')
 
 connection = None
 
