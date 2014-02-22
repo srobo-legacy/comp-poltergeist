@@ -90,10 +90,8 @@ def perform_show_schedule(responder, options):
     except ParseError:
         responder('Sorry, I didn\'t understand that time')
         return
-    def onCompleted(entries):
-        for k, v in entries:
-            responder('{0} - {1}'.format(format_time(v), k))
-        if not entries:
-            responder('No events in that time period')
-    schedule.events_between(from_, to_).addCallback(onCompleted)
-
+    entries = schedule.events_between(from_, to_)
+    for k, v in entries:
+        responder('{0} - {1}'.format(format_time(v), k))
+    if not entries:
+        responder('No events in that time period')
