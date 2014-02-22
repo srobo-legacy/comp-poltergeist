@@ -6,35 +6,36 @@ import re
 
 class ScreenDB(object):
     """A screen database."""
-    def __init__(self):
-        """Default constructor."""
-        pass
+
+    def __init__(self, redis_connection):
+        """Creates a new database wrapper around the given connection."""
+        self._conn = redis_connection
 
     def set_mode(self, screen, mode):
-        redis_client.connection.set('screen:{0}:mode'.format(screen),
+        self._conn.set('screen:{0}:mode'.format(screen),
                                     mode)
-        redis_client.connection.publish('screen:update', 'update')
+        self._conn.publish('screen:update', 'update')
 
     def set_override(self, screen, override):
         if override is not None:
-            redis_client.connection.set('screen:{0}:override'.format(screen),
+            self._conn.set('screen:{0}:override'.format(screen),
                                         override)
         else:
-            redis_client.connection.delete('screen:{0}:override'.format(screen))
-        redis_client.connection.publish('screen:update', 'update')
+            self._conn.delete('screen:{0}:override'.format(screen))
+        self._conn.publish('screen:update', 'update')
 
     def list(self):
-        screens = redis_client.connection.keys('screen:*:mode')
+        screens = self._conn.keys('screen:*:mode')
         entries = {}
         for screen in screens:
             screenID = screen.split(':')[1]
-            mode = redis_client.connection.get('screen:{0}:mode'.format(screenID))
-            host = redis_client.connection.get('screen:{0}:host'.format(screenID))
+            mode = self._conn.get('screen:{0}:mode'.format(screenID))
+            host = self._conn.get('screen:{0}:host'.format(screenID))
             entries[screenID] = {'mode': mode,
                                  'host': host}
         return entries
 
-screens = ScreenDB()
+screens = ScreenDB(redis_client.connection)
 
 @control.handler('screen-list')
 def perform_screen_list(responder, options):

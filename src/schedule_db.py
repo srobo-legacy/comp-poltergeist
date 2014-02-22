@@ -17,9 +17,10 @@ def create_id(prefix):
 
 class ScheduleDB(object):
     """A schedule database."""
-    def __init__(self):
-        """Default constructor."""
-        pass
+
+    def __init__(self, redis_connection):
+        """Creates a new database wrapper around the given connection."""
+        self._conn = redis_connection
 
     def create_event(self, time, type_):
         """Schedule an event in the day. time should be given as a unix
@@ -29,29 +30,29 @@ class ScheduleDB(object):
         if type_ not in EVENT_TYPES:
             raise ValueError('unknown event type')
         id_ = create_id(type_)
-        redis_client.connection.set('comp:events:{0}'.format(id_),
+        self._conn.set('comp:events:{0}'.format(id_),
                                     type_)
-        redis_client.connection.zadd("comp:schedule", time, id_)
-        redis_client.connection.publish('comp:schedule', 'update')
+        self._conn.zadd("comp:schedule", time, id_)
+        self._conn.publish('comp:schedule', 'update')
         return id_
 
     def cancel_event(self, id_):
         """Cancel an event in the day's schedule."""
-        redis_client.connection.delete('comp:events:{0}'.format(id_))
-        redis_client.connection.zrem('comp:schedule', id_)
-        redis_client.connection.publish('comp:schedule', 'update')
+        self._conn.delete('comp:events:{0}'.format(id_))
+        self._conn.zrem('comp:schedule', id_)
+        self._conn.publish('comp:schedule', 'update')
 
     def events_between(self, start, end):
         """Get events between a given start and end point, specified in
         seconds from the start of the day.
 
         Returns a list of (id, time) pairs."""
-        return redis_client.connection.zrangebyscore('comp:schedule',
-                                                     start,
-                                                     end,
-                                                     withscores=True)
+        return self._conn.zrangebyscore('comp:schedule',
+                                        start,
+                                        end,
+                                        withscores=True)
 
-schedule = ScheduleDB()
+schedule = ScheduleDB(redis_client.connection)
 
 class ParseError(Exception):
     """Indicates an error when parsing time values."""

@@ -9,13 +9,14 @@ import ranker
 
 class ScoresDB(object):
     """A scores database."""
-    def __init__(self):
-        """Default constructor."""
-        pass
+
+    def __init__(self, redis_connection):
+        """Creates a new database wrapper around the given connection."""
+        self._conn = redis_connection
 
     def set_match_score(self, match, tla, match_score):
         """Sets the score for a given team in a given match."""
-        redis_client.connection.set('match:scores:{0}:{1}:game'.format(match, tla),
+        self._conn.set('match:scores:{0}:{1}:game'.format(match, tla),
                                     match_score)
 
     def set_league_points(self, match, points):
@@ -24,36 +25,36 @@ class ScoresDB(object):
         keys = ['match:scores:{0}:{1}:league'.format(match, tla) for tla in points.keys()]
         keyed_points = dict(zip(keys, points.values()))
 
-        redis_client.connection.mset(keyed_points)
+        self._conn.mset(keyed_points)
 
     def get_league_points(self, tla):
         """Gets the league points a given team."""
 
-        keys = redis_client.connection.keys('match:scores:*:{0}:league'.format(tla))
+        keys = self._conn.keys('match:scores:*:{0}:league'.format(tla))
         if len(keys) == 0:
             return None
-        points = redis_client.connection.mget(*keys)
+        points = self._conn.mget(*keys)
         return sum(points)
 
     def disqualify(self, match, tla):
         """Disqualifies a given team in a given match."""
-        redis_client.connection.set('match:scores:{0}:{1}:dsq'.format(match, tla), True)
+        self._conn.set('match:scores:{0}:{1}:dsq'.format(match, tla), True)
 
     def re_qualify(self, match, tla):
         """Re-qualifies a given team in a given match.
         Just in case a judge changes their mind."""
-        redis_client.connection.delete('match:scores:{0}:{1}:dsq'.format(match, tla))
+        self._conn.delete('match:scores:{0}:{1}:dsq'.format(match, tla))
 
     def teams_in_match(self, match):
         # Get a list of the teams in a given match for which we have game scores
-        keys = redis_client.connection.keys('match:scores:{0}:*:game'.format(match))
+        keys = self._conn.keys('match:scores:{0}:*:game'.format(match))
         teams = [re.match('match:scores:{0}:([a-zA-Z0-9]*):game'.format(match), key).group(1)
                              for key in keys]
         return teams
 
     def teams_disqualified_in_match(self, match):
         # Get a list of the teams disqualified in a given match
-        keys = redis_client.connection.keys('match:scores:{0}:*:dsq'.format(match))
+        keys = self._conn.keys('match:scores:{0}:*:dsq'.format(match))
         teams = [re.match('match:scores:{0}:([a-zA-Z0-9]*):dsq'.format(match), key).group(1)
                              for key in keys]
         return teams
@@ -65,7 +66,7 @@ class ScoresDB(object):
             return None
 
         raw_scores = \
-            redis_client.connection.mget(*['match:scores:{0}:{1}:game'.format(match, tla)
+            self._conn.mget(*['match:scores:{0}:{1}:game'.format(match, tla)
                                                    for tla in teams])
 
         match_scores = dict(zip(teams, raw_scores))
@@ -75,10 +76,10 @@ class ScoresDB(object):
         """Gets the score for a given team in a given match.
 
         Returns something"""
-        value = redis_client.connection.get('match:scores:{0}:{1}:game'.format(match, tla))
+        value = self._conn.get('match:scores:{0}:{1}:game'.format(match, tla))
         return value
 
-scores = ScoresDB()
+scores = ScoresDB(redis_client.connection)
 yaml_opt = '--yaml'
 
 @control.handler('set-score')

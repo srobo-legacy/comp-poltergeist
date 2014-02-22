@@ -9,38 +9,38 @@ from utils import format_time, parse_time
 
 class MatchDB(object):
     """A match database."""
-    def __init__(self):
-        """Default constructor."""
-        pass
+
+    def __init__(self, redis_connection):
+        """Creates a new database wrapper around the given connection."""
+        self._conn = redis_connection
 
     def create_match(self, name, time, format = 'league'):
         """Schedule a match. name should be a unique idenitifier for the
         match, time should be a unix timestamp for the start of the match."""
-        redis_client.connection.set('match:matches:{0}:format'.format(name),
-                                    format)
-        redis_client.connection.zadd('match:schedule', time, name)
-        redis_client.connection.publish('match:schedule', 'update')
+        self._conn.set('match:matches:{0}:format'.format(name), format)
+        self._conn.zadd('match:schedule', time, name)
+        self._conn.publish('match:schedule', 'update')
 
     def cancel_match(self, name):
         """Cancel a match."""
-        redis_client.connection.delete('match:matches:{0}:format'.format(name))
-        redis_client.connection.zrem('match:schedule', name)
-        redis_client.connection.publish('match:schedule', 'update')
+        self._conn.delete('match:matches:{0}:format'.format(name))
+        self._conn.zrem('match:schedule', name)
+        self._conn.publish('match:schedule', 'update')
 
     def set_teams(self, name, teams):
         """Set the teams for a match."""
-        redis_client.connection.delete('match:matches:{0}:teams'.format(name))
+        self._conn.delete('match:matches:{0}:teams'.format(name))
         if teams is not None:
             for team in teams:
-                redis_client.connection.rpush('match:matches:{0}:teams'.format(name),
+                self._conn.rpush('match:matches:{0}:teams'.format(name),
                                                     team)
-        redis_client.connection.publish('match:schedule', 'update')
+        self._conn.publish('match:schedule', 'update')
 
 
     def get_teams(self, name):
         """Get the teams for a match."""
-        n_teams = redis_client.connection.llen('match:matches:{0}:teams'.format(name))
-        teams = redis_client.connection.lrange('match:matches:{0}:teams'.format(name), 0, n_teams-1)
+        n_teams = self._conn.llen('match:matches:{0}:teams'.format(name))
+        teams = self._conn.lrange('match:matches:{0}:teams'.format(name), 0, n_teams-1)
         return teams
 
     def matches_between(self, start, end):
@@ -48,12 +48,12 @@ class MatchDB(object):
         unix timestamps.
 
         Returns a list of (name, time) pairs."""
-        return redis_client.connection.zrangebyscore('match:schedule',
-                                                     start,
-                                                     end,
-                                                     withscores=True)
+        return self._conn.zrangebyscore('match:schedule',
+                                        start,
+                                        end,
+                                        withscores=True)
 
-matches = MatchDB()
+matches = MatchDB(redis_client.connection)
 yaml_opt = '--yaml'
 
 @control.handler('add-match')
