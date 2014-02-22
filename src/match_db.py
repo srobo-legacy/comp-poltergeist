@@ -44,10 +44,10 @@ class MatchDB(object):
         return teams
 
     def matches_between(self, start, end):
-        """Get events between a given start and end point, specified as
-        unix timestamps.
+        """Get events between a given start and end point, each specified
+        as a unix timestamp.
 
-        Returns a list of (name, time) pairs."""
+        Returns a list of (name, timestamp) pairs."""
         return self._conn.zrangebyscore('match:schedule',
                                         start,
                                         end,

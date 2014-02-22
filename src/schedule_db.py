@@ -43,10 +43,10 @@ class ScheduleDB(object):
         self._conn.publish('comp:schedule', 'update')
 
     def events_between(self, start, end):
-        """Get events between a given start and end point, specified in
-        seconds from the start of the day.
+        """Get events between a given start and end point, each specified
+        as a unix timestamp.
 
-        Returns a list of (id, time) pairs."""
+        Returns a list of (id, timestamp) pairs."""
         return self._conn.zrangebyscore('comp:schedule',
                                         start,
                                         end,
