@@ -18,6 +18,14 @@ For developing, you can start the redis server using `./start-redis`, and
 stop it using `./stop-redis`. Production environments are expected to run
 the redis server as a service or similar.
 
+Tests
+-----
+
+Run the tests using `./run-tests` in the root. The tests rely on nosetest
+setting up the right paths for the tests to magically find the sources,
+so even when running just one test case, you still need to run them from
+the root.
+
 Interfaces
 ==========
 There is one main interface to compd, which is just a direct socket connection.
