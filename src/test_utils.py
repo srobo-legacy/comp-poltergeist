@@ -6,8 +6,6 @@ import utils
 
 # Unit tests
 
-## ScoresDB access
-
 def assertEqual(expected, actual):
     assert expected == actual, "\nExpected: {0}\n  Actual: {1}".format(expected, actual)
 
