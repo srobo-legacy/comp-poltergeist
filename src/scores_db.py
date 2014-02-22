@@ -1,6 +1,5 @@
 """Team scores database."""
 
-from uuid import uuid4
 import redis_client
 import control
 import re
