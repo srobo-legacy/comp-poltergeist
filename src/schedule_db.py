@@ -63,7 +63,7 @@ def perform_schedule(responder, options):
     """Handle the `schedule` command."""
     try:
         time = parse_time(options['<time>'])
-    except ParseError:
+    except ValueError:
         responder('Sorry, I didn\'t understand that time')
         return
     for type_ in EVENT_TYPES:
@@ -87,7 +87,7 @@ def perform_show_schedule(responder, options):
     try:
         from_ = parse_time(options['<from>'])
         to_ = parse_time(options['<to>'])
-    except ParseError:
+    except ValueError:
         responder('Sorry, I didn\'t understand that time')
         return
     entries = schedule.events_between(from_, to_)
