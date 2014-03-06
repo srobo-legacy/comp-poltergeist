@@ -124,7 +124,7 @@ def perform_add_team(responder, options):
     responder('Team {0} added.'.format(options['<tla>']))
 
 @control.handler('del-team')
-def perform_add_team(responder, options):
+def perform_del_team(responder, options):
     roster.delete(options['<tla>'])
     responder('Team {0} dropped.'.format(options['<tla>']))
 
