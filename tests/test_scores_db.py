@@ -28,17 +28,6 @@ def test_set_league_points():
     call_data = {'match:scores:1:ABC:league':1.0, 'match:scores:1:DEF:league':2.0}
     fake_connection.mset.assert_called_once_with(call_data)
 
-def test_set_league_points():
-    fake_connection = mock.Mock()
-    fake_connection.mset = mock.Mock()
-
-    scores = scores_db.ScoresDB(fake_connection)
-
-    raw_data = {'ABC':1.0, 'DEF':2.0}
-    scores.set_league_points(1, raw_data)
-    call_data = {'match:scores:1:ABC:league':1.0, 'match:scores:1:DEF:league':2.0}
-    fake_connection.mset.assert_called_once_with(call_data)
-
 def test_get_league_points():
     fake_connection = mock.Mock()
     keys = ['match:scores:1:ABC:league', 'match:scores:2:ABC:league']
