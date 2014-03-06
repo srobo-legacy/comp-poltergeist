@@ -16,10 +16,6 @@ Usage:
   compctl set-team-absent <tla>
   compctl list-teams [--yaml]
   compctl team [--yaml] <tla>
-  compctl screen-list
-  compctl screen-set-mode <id> <mode>
-  compctl screen-override <id> <message>
-  compctl screen-clear-override <id>
   compctl set-score <match-id> <tla> <score>
   compctl get-score [--yaml] <match-id> <tla>
   compctl get-scores [--yaml] <match-id>
