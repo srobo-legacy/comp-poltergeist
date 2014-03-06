@@ -1,6 +1,7 @@
 """Match schedule commands."""
 
 import re
+import time
 import yaml
 
 import control
@@ -62,3 +63,26 @@ def perform_list_matches(responder, options):
     else:
         for match, time in output:
             responder('{0}: {1}'.format(format_time(time), match))
+
+def get_when(options):
+    when = options.get('<when>', None)
+    if when is None:
+        when = time.time()
+    else:
+        when = parse_time(when)
+    # only stored to nearest second
+    when = int(when)
+    return when
+
+@control.handler('get-delay')
+def perform_get_delay(responder, options):
+    when = get_when(options)
+    delay = matches.get_delay(when)
+    responder(yaml.dump({'delay': delay, 'units':'seconds'}))
+
+@control.handler('get-delay')
+def perform_set_delay(responder, options):
+    when = get_when(options)
+    delay = options['<delay>']
+    matches.set_delay(when, delay)
+    responder('delay set')

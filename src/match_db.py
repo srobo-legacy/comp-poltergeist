@@ -48,22 +48,17 @@ class MatchDB(object):
                                         end,
                                         withscores=True)
 
-    def get_delay(self, when = None):
+    def get_delay(self, when):
         """Gets the delay at the given point in time, specified as a unix
-        timestamp, defaulting to the current delay.
+        timestamp.
 
         Returns an integer representing the delay in seconds."""
-        if when is None:
-            when = int(time.time())
-
         delays = self._conn.zrangebyscore('match:delays', 0, when)
         if len(delays):
             return delays[-1][0]
         return 0
 
-    def set_delay(self, delay, when = None):
+    def set_delay(self, when, delay):
         """Sets the delay in seconds at the given point in time, specified
-        as a unix timestamp, defaulting to the current delay."""
-        if when is None:
-            when = int(time.time())
+        as a unix timestamp."""
         self._conn.zadd('match:delays', when, delay)
