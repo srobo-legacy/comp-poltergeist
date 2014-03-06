@@ -3,6 +3,7 @@
 import redis_client
 import control
 import re
+import time
 import yaml
 
 from utils import format_time, parse_time
@@ -52,6 +53,27 @@ class MatchDB(object):
                                         start,
                                         end,
                                         withscores=True)
+
+    def get_delay(self, when = None):
+        """Gets the delay at the given point in time, specified as a unix
+        timestamp, defaulting to the current delay.
+
+        Returns an integer representing the delay in seconds."""
+        if when is None:
+            when = int(time.time())
+
+        delays = self._conn.zrangebyscore('match:delays', 0, when)
+        if len(delays):
+            return delays[-1][0]
+        return 0
+
+    def set_delay(self, delay, when = None):
+        """Sets the delay in seconds at the given point in time, specified
+        as a unix timestamp, defaulting to the current delay."""
+        if when is None:
+            when = int(time.time())
+        self._conn.zadd('match:delays', when, delay)
+
 
 matches = MatchDB(redis_client.connection)
 yaml_opt = '--yaml'

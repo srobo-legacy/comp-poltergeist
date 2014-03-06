@@ -16,6 +16,11 @@ A list of team identifiers which are in the match.
 A sorted set of `match-id`s.
 The keys of the sorted set are unix timestamps for the match
 
+## `match:delays`
+A sorted set of delays to the schedule.
+The keys of the sorted set are unix timestamps for the delay, the value
+is the number of seconds by which the matches should be delayed.
+The current delay is therefore the value of the most recent key.
 
 # Schedule
 
