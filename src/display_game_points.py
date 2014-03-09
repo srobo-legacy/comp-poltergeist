@@ -7,8 +7,6 @@ import display_utils
 
 config.load_config()
 
-QUALIFYING_TEAMS = 24
-
 last_scored_match = display_utils.last_scored_match()
 print '''//TITLE: 2013 Competition Game Points
 
