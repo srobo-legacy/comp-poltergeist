@@ -12,10 +12,12 @@ Pre-reqs:
 * docopt
 * PyYAML
 * python-dateutil
+* local submodules
 * nose (for testing)
 * mock (for testing)
 
-You should install the python related pre-reqs using `./install`.
+You should install the python related pre-reqs using `./install` (which will
+also ensure the submodules are present).
 This creates a virtualenv at `dep`, which is used by all the scripts in
 the root of the repo.
 
