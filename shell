@@ -5,6 +5,5 @@ if [ ! -d dep ]
     exit 1
 fi
 source dep/bin/activate
-export PS1="compd> "
+export PS1="poltergeist> "
 exec bash
-
