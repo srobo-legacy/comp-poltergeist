@@ -1,13 +1,10 @@
 
 from collections import defaultdict
-import config
 
 import talk
 from display_utils import get_all_league_rows
 
 MAX_POS = 10
-
-config.load_config()
 
 QUALIFYING_TEAMS = 24
 

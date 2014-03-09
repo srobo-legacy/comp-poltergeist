@@ -1,16 +1,18 @@
 
 import redis
 
-import config
-#config.load_config('config.yaml')
+from config import config
 
 connection = None
 
 def run_redis_client(on_started = None):
     global connection
-    connection = redis.Redis(config.redis['host'],
-                             config.redis['port'],
-                             config.redis['db'])
+    host = config.get('redis', 'host')
+    port = int(config.get('redis', 'port'))
+    db = int(config.get('redis', 'db'))
+
+    connection = redis.Redis(host, port, db)
+
     if on_started:
         on_started()
 
@@ -21,3 +23,6 @@ def add_subscribe(key, callback):
     function with one that actually subscribes.
     """
     pass
+
+if connection is None:
+    run_redis_client()

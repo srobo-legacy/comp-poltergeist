@@ -2,10 +2,7 @@
 from datetime import datetime
 import sys
 
-import config
 import talk
-
-config.load_config()
 
 MAX_TEAMS_PER_MATCH = 4
 

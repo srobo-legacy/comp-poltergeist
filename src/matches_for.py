@@ -2,11 +2,8 @@
 from datetime import datetime
 import sys
 
-import config
 import talk
 from display_utils import get_delayed_time
-
-config.load_config()
 
 req_team = sys.argv[1]
 

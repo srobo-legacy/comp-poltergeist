@@ -1,11 +1,8 @@
 
-import config
-
 import talk
 from datetime import datetime
 from display_utils import HTMLSchedule, Schedule
 
-config.load_config()
 
 match_data = talk.command_yaml('list-matches 2013-04-12 2014-01-01')
 match_data = match_data['matches']

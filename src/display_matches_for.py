@@ -2,10 +2,7 @@
 import sys
 
 from display_utils import HTMLSchedule, Schedule
-import config
 import talk
-
-config.load_config()
 
 ALL_OPT = '--all'
 

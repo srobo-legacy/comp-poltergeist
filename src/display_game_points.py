@@ -1,11 +1,8 @@
 
 from collections import defaultdict
 
-import config
 import talk
 import display_utils
-
-config.load_config()
 
 last_scored_match = display_utils.last_scored_match()
 print '''//TITLE: 2013 Competition Game Points

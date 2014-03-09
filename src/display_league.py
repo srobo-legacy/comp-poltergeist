@@ -1,10 +1,6 @@
 
-import config
-
 import talk
 import display_utils
-
-config.load_config()
 
 QUALIFYING_TEAMS = 24
 
