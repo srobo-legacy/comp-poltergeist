@@ -55,7 +55,7 @@ class MatchDB(object):
         Returns an integer representing the delay in seconds."""
         delays = self._conn.zrangebyscore('match:delays', 0, when)
         if len(delays):
-            return delays[-1][0]
+            return int(delays[-1])
         return 0
 
     def set_delay(self, when, delay):

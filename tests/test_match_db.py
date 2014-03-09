@@ -4,9 +4,9 @@ import mock
 import match_db
 
 def test_get_delay_then():
-    then = 142
+    then = 14200
     fake_connection = mock.Mock()
-    delays = [(10, 42), (51, 65)]
+    delays = ['100', '51']
     fake_connection.zrangebyscore = mock.Mock(return_value = delays)
 
     matches = match_db.MatchDB(fake_connection)
@@ -17,7 +17,7 @@ def test_get_delay_then():
     fake_connection.zrangebyscore.assert_called_once_with('match:delays', 0, then)
 
 def test_get_delay_then_none():
-    then = 142
+    then = 14200
     fake_connection = mock.Mock()
     delays = []
     fake_connection.zrangebyscore = mock.Mock(return_value = delays)
