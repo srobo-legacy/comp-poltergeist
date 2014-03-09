@@ -105,6 +105,7 @@ def default_responder(output):
 def handle(cmd, responder = default_responder, no_auto_fail = False,
            short_fail = True):
     try:
+        cmd = cmd.strip()
         dispatch(parse(cmd), responder)
     except CommandError as ce:
         if no_auto_fail:
