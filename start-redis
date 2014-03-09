@@ -1,0 +1,4 @@
+#!/bin/bash
+cd database
+redis-server redis.conf > redis-out 2>&1 &
+disown

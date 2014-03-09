@@ -1,0 +1,2 @@
+#!/bin/sh
+redis-cli -p `grep -E "^port [[:digit:]]+" database/redis.conf | sed 's/port //'` shutdown
