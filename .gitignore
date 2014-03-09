@@ -2,3 +2,4 @@
 /dep
 /config.yaml
 /.coverage
+/database/redis-out
