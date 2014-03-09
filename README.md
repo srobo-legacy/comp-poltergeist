@@ -10,10 +10,13 @@ Pre-reqs:
 * redis, version 2.6 or later
 * redis-py
 * docopt
-* mock
 * PyYAML
+* nose (for testing)
+* mock (for testing)
 
-You can install the python related pre-reqs using `./install`.
+You should install the python related pre-reqs using `./install`.
+This creates a virtualenv at `dep`, which is used by all the scripts in
+the root of the repo.
 
 Since the poltergeist library uses a redis instance as its datastore, a
 redis-server needs to be running for poltergeist to do anything useful.
