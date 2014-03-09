@@ -1,4 +1,5 @@
-dep
 *.pyc
-config.yaml
-.coverage
+/dep
+/config.yaml
+/.coverage
+/database/redis-out
