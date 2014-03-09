@@ -1,19 +1,4 @@
 #!/bin/bash
-rm -rf dep
-virtualenv dep
+virtualenv --system-site-packages dep
 source dep/bin/activate
-easy_install pyyaml
-easy_install docopt
-easy_install nose
-easy_install coverage
-easy_install mock
-easy_install python-dateutil
-if [ ! -f config.yaml ]
-  then
-    cp config.yaml.example config.yaml
-    echo "Installing default configuration, please change this!"
-fi
-git submodule update --init
-cd match-scheduler
-exec ./install
-
+pip install docopt PyYAML redis nose
