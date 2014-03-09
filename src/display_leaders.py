@@ -1,12 +1,8 @@
 
 from collections import defaultdict
 
-from display_utils import get_all_league_rows
+from display_utils import get_all_league_rows, MAX_POS, QUALIFYING_TEAMS
 import talk
-
-MAX_POS = 10
-
-QUALIFYING_TEAMS = 24
 
 print '<table><tr>'
 print '<th> Position </th><th> Points </th><th> Team </th>'

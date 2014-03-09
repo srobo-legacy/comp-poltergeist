@@ -2,6 +2,7 @@
 from collections import defaultdict
 from datetime import date, datetime, timedelta
 
+from config import config
 import talk
 
 # Set the delay of the current
@@ -10,8 +11,11 @@ DELAYS = {
     date(2013, 04, 14): timedelta(minutes = 0)
 }
 
-# Over-estimate for optimisation
-TOTAL_MATCHES = 150
+MAX_POS = config.get('display', 'leaderboard_size')
+TOTAL_MATCHES = config.get('display', 'total_matches')
+
+QUALIFYING_TEAMS = config.get('competition', 'teams_in_knockout')
+YEAR = config.get('competition', 'sr_year')
 
 MATCH_ID = 'match-{0}'
 

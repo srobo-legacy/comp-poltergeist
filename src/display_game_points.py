@@ -5,14 +5,14 @@ import display_utils
 import talk
 
 last_scored_match = display_utils.last_scored_match()
-print '''//TITLE: 2013 Competition Game Points
+print '''//TITLE: {1} Competition Game Points
 
 # Game Points Totals
 
 Up to date with scores from match {0}
 
 | Team | Points |
-|------|--------|'''.format(last_scored_match)
+|------|--------|'''.format(last_scored_match, display_utils.YEAR)
 
 all_scores = display_utils.get_all_match_scores()
 
