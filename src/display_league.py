@@ -1,6 +1,6 @@
 
-import talk
 import display_utils
+import talk
 
 QUALIFYING_TEAMS = 24
 

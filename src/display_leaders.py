@@ -1,8 +1,8 @@
 
 from collections import defaultdict
 
-import talk
 from display_utils import get_all_league_rows
+import talk
 
 MAX_POS = 10
 
