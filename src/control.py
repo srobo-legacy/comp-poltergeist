@@ -29,7 +29,7 @@ Usage:
   compctl del-match <name>
   compctl set-match-teams <name> <team>...
   compctl get-match-teams [--yaml] <match-id>
-  compctl get-delay [<when>]
+  compctl get-delay [--yaml] [<when>]
   compctl set-delay <delay> [<when>]
   compctl clear-match-teams <name>
   compctl list-matches [--yaml] <from> <to>
