@@ -32,3 +32,10 @@ def test_teams():
     teams_info = yaml.load(teams_info_yaml)
     assert 'list' in teams_info
     # Can't assert about the data
+
+def test_delay():
+    dur = 42
+    check_output('set-delay', str(dur))
+    delay = yaml.load(check_output('get-delay'))
+    assert delay['units'] == 'seconds'
+    assert delay['delay'] == dur
