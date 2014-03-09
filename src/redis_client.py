@@ -11,7 +11,9 @@ def run_redis_client(on_started = None):
     port = int(config.get('redis', 'port'))
     db = int(config.get('redis', 'db'))
 
-    connection = redis.Redis(host, port, db)
+    # NOTE: Some of the argument orderings are different between Redis
+    # and StrictRedis. Think carefully before changing this.
+    connection = redis.StrictRedis(host, port, db)
 
     if on_started:
         on_started()
