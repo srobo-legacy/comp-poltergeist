@@ -19,7 +19,7 @@ def check_output(*args):
     args_list.insert(0, commander)
     output = subprocess.check_output(args_list)
     assert output is not None
-    print output
+    print output.strip()
     return output
 
 def test_version():
