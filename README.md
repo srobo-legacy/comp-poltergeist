@@ -11,7 +11,7 @@ Pre-reqs:
 * redis-py
 * docopt
 * PyYAML
-* python-dateutil
+* python-dateutil (v1.5)
 * local submodules
 * nose (for testing)
 * mock (for testing)

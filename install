@@ -2,4 +2,4 @@
 git submodule update --init --recursive
 virtualenv --system-site-packages dep
 source dep/bin/activate
-pip install docopt python-dateutil PyYAML redis nose mock
+pip install docopt python-dateutil==1.5 PyYAML redis nose mock
