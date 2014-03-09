@@ -5,12 +5,6 @@ from datetime import date, datetime, timedelta
 from poltergeist.config import config
 import talk
 
-# Set the delay of the current
-DELAYS = {
-    date(2013, 04, 13): timedelta(minutes = 6),
-    date(2013, 04, 14): timedelta(minutes = 0)
-}
-
 MAX_POS = config.get('display', 'leaderboard_size')
 TOTAL_MATCHES = config.get('display', 'total_matches')
 
@@ -38,8 +32,9 @@ def format_name(tla, name):
     return name
 
 def get_delayed_time(original):
-    orig_date = original.date()
-    delay = DELAYS.get(orig_date, timedelta(0))
+    delay = talk.command_yaml('get-delay "{0}"'.format(original))
+    assert delay['units'] == 'seconds'
+    delay = timedelta(seconds=delay['delay'])
     new_dt = original + delay
     return new_dt
 
