@@ -80,7 +80,7 @@ def perform_get_delay(responder, options):
     delay = matches.get_delay(when)
     responder(yaml.dump({'delay': delay, 'units':'seconds'}))
 
-@control.handler('get-delay')
+@control.handler('set-delay')
 def perform_set_delay(responder, options):
     when = get_when(options)
     delay = options['<delay>']
