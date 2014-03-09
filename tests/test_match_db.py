@@ -37,5 +37,5 @@ def test_set_delay_then():
     matches = match_db.MatchDB(fake_connection)
 
     delay = 90 # 1 minute 30
-    matches.set_delay(delay, then)
-    fake_connection.zadd.assert_called_once_with('match:delays', delay, then)
+    matches.set_delay(then, delay)
+    fake_connection.zadd.assert_called_once_with('match:delays', then, delay)
