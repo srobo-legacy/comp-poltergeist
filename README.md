@@ -10,6 +10,9 @@ Pre-reqs:
 * redis, version 2.6 or later
 * redis-py
 * docopt
+* PyYAML
+
+You can install the python related pre-reqs using `./install`.
 
 Since the poltergeist library uses a redis instance as its datastore, a
 redis-server needs to be running for poltergeist to do anything useful.
