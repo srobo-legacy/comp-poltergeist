@@ -9,12 +9,8 @@ Options:
 """
 
 from docopt import docopt
-import os.path
-import socket
-import sys
 
 import talk
-import config
 
 options = docopt(__doc__)
 
