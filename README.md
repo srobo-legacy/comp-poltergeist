@@ -1,5 +1,6 @@
 # Poltergeist
 
+[![Build Status](https://travis-ci.org/PeterJCLaw/poltergeist.png?branch=master)](https://travis-ci.org/PeterJCLaw/poltergeist)
 A competition database interface for [Student Robotics](https://www.studentrobotics.org).
 
 Getting Started
