@@ -4,4 +4,4 @@ if [ ! -d dep ]
     echo "No 'dep' directory... did you run ./install?"
     exit 1
 fi
-exec dep/bin/python /usr/bin/nosetests tests $@
+exec dep/bin/python `which nosetests` tests $@
