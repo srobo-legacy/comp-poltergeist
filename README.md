@@ -10,6 +10,7 @@ Pre-reqs:
 * redis, version 2.6 or later
 * redis-py
 * docopt
+* mock
 * PyYAML
 
 You can install the python related pre-reqs using `./install`.

@@ -1,4 +1,4 @@
 #!/bin/bash
 virtualenv --system-site-packages dep
 source dep/bin/activate
-pip install docopt PyYAML redis nose
+pip install docopt PyYAML redis nose mock
