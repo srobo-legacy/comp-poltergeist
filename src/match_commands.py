@@ -5,7 +5,7 @@ import time
 import yaml
 
 import control
-from match_db import MatchDB
+from poltergeist.match_db import MatchDB
 from poltergeist import redis_client
 from poltergeist.utils import format_time, parse_time
 
