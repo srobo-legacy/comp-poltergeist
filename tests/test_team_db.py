@@ -1,7 +1,7 @@
 
 import mock
 
-import team_db
+from poltergeist import team_db
 
 def test_add():
     fake_connection = mock.Mock()

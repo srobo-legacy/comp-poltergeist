@@ -1,7 +1,7 @@
 
 import mock
 
-import schedule_db
+from poltergeist import schedule_db
 
 def test_new():
     uuid_handler = mock.Mock(return_value = 'eyes')

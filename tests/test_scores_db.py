@@ -1,5 +1,5 @@
 
-import scores_db
+from poltergeist import scores_db
 import mock
 import control
 import yaml

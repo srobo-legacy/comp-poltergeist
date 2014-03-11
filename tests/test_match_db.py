@@ -1,7 +1,7 @@
 
 import mock
 
-import match_db
+from poltergeist import match_db
 
 def test_get_delay_then():
     then = 14200

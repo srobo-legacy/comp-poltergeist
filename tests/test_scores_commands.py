@@ -146,7 +146,7 @@ def test_calc_league_points():
     fake_ranker = mock.Mock(return_value = results)
     fake_set_league_pts = mock.Mock()
     fake_responder = mock.Mock()
-    with mock.patch('ranker.get_ranked_points', fake_ranker), \
+    with mock.patch('poltergeist.ranker.get_ranked_points', fake_ranker), \
          mock.patch('scores_commands.scores.get_match_scores', fake_get_scores), \
          mock.patch('scores_commands.scores.set_league_points', fake_set_league_pts), \
          mock.patch('scores_commands.scores.teams_disqualified_in_match', fake_get_dsqs):
@@ -176,7 +176,7 @@ def test_calc_league_points_yaml():
     fake_ranker = mock.Mock(return_value = results)
     fake_set_league_pts = mock.Mock()
     fake_responder = mock.Mock()
-    with mock.patch('ranker.get_ranked_points', fake_ranker), \
+    with mock.patch('poltergeist.ranker.get_ranked_points', fake_ranker), \
          mock.patch('scores_commands.scores.get_match_scores', fake_get_scores), \
          mock.patch('scores_commands.scores.set_league_points', fake_set_league_pts), \
          mock.patch('scores_commands.scores.teams_disqualified_in_match', fake_get_dsqs):
@@ -203,7 +203,7 @@ def test_calc_league_points_empty():
     fake_ranker = mock.Mock(return_value = results)
     fake_set_league_pts = mock.Mock()
     fake_responder = mock.Mock()
-    with mock.patch('ranker.get_ranked_points', fake_ranker), \
+    with mock.patch('poltergeist.ranker.get_ranked_points', fake_ranker), \
          mock.patch('scores_commands.scores.get_match_scores', fake_get_scores), \
          mock.patch('scores_commands.scores.set_league_points', fake_set_league_pts), \
          mock.patch('scores_commands.scores.teams_disqualified_in_match', fake_get_dsqs):
@@ -229,7 +229,7 @@ def test_calc_league_points_empty_yaml():
     fake_ranker = mock.Mock(return_value = results)
     fake_set_league_pts = mock.Mock()
     fake_responder = mock.Mock()
-    with mock.patch('ranker.get_ranked_points', fake_ranker), \
+    with mock.patch('poltergeist.ranker.get_ranked_points', fake_ranker), \
          mock.patch('scores_commands.scores.get_match_scores', fake_get_scores), \
          mock.patch('scores_commands.scores.set_league_points', fake_set_league_pts), \
          mock.patch('scores_commands.scores.teams_disqualified_in_match', fake_get_dsqs):

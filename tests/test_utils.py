@@ -2,7 +2,7 @@
 import datetime
 import time
 
-import utils
+from poltergeist import utils
 
 # Unit tests
 
