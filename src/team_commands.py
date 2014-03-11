@@ -5,7 +5,7 @@ import yaml
 
 import control
 import redis_client
-from team_db import TeamDB
+from poltergeist.team_db import TeamDB
 
 roster = TeamDB(redis_client.connection)
 yaml_opt = '--yaml'
