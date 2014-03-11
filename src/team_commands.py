@@ -4,7 +4,7 @@ import re
 import yaml
 
 import control
-import redis_client
+from poltergeist import redis_client
 from poltergeist.team_db import TeamDB
 
 roster = TeamDB(redis_client.connection)

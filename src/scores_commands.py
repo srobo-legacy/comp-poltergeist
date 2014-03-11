@@ -4,7 +4,7 @@ import yaml
 
 import control
 import ranker
-import redis_client
+from poltergeist import redis_client
 from scores_db import ScoresDB
 
 scores = ScoresDB(redis_client.connection)

@@ -1,7 +1,7 @@
 """Day schedule commands."""
 
 import control
-import redis_client
+from poltergeist import redis_client
 from schedule_db import ScheduleDB, EVENT_TYPES
 from utils import format_time, parse_time
 
