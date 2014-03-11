@@ -33,9 +33,6 @@ Usage:
   compctl set-delay <delay> [<when>]
   compctl clear-match-teams <name>
   compctl list-matches [--yaml] <from> <to>
-  compctl kill
-  compctl unkill
-
 """
 
 import shlex
