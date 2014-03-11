@@ -5,7 +5,7 @@ import yaml
 import control
 import ranker
 from poltergeist import redis_client
-from scores_db import ScoresDB
+from poltergeist.scores_db import ScoresDB
 
 scores = ScoresDB(redis_client.connection)
 yaml_opt = '--yaml'
