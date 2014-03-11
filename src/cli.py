@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """compd-cli
 
 Usage:

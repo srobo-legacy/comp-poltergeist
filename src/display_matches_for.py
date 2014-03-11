@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 import sys
 
 from display_utils import HTMLSchedule, Schedule
