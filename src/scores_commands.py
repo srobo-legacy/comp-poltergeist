@@ -3,7 +3,7 @@
 import yaml
 
 import control
-import ranker
+from poltergeist import ranker
 from poltergeist import redis_client
 from poltergeist.scores_db import ScoresDB
 
