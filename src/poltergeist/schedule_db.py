@@ -2,7 +2,7 @@
 
 from uuid import uuid4
 
-from poltergeist.utils import format_time, parse_time
+from utils import format_time, parse_time
 
 EVENT_TYPES = ('league', 'knockout', 'lunch', 'open',
                'tinker', 'photo', 'prizes', 'briefing')
