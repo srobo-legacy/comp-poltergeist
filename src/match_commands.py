@@ -7,7 +7,7 @@ import yaml
 import control
 from match_db import MatchDB
 from poltergeist import redis_client
-from utils import format_time, parse_time
+from poltergeist.utils import format_time, parse_time
 
 matches = MatchDB(redis_client.connection)
 yaml_opt = '--yaml'

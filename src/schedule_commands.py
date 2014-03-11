@@ -3,7 +3,7 @@
 import control
 from poltergeist import redis_client
 from poltergeist.schedule_db import ScheduleDB, EVENT_TYPES
-from utils import format_time, parse_time
+from poltergeist.utils import format_time, parse_time
 
 schedule = ScheduleDB(redis_client.connection)
 
