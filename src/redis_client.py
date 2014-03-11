@@ -1,7 +1,7 @@
 
 import redis
 
-from config import config
+from poltergeist.config import config
 
 connection = None
 

@@ -2,7 +2,7 @@
 from collections import defaultdict
 from datetime import date, datetime, timedelta
 
-from config import config
+from poltergeist.config import config
 import talk
 
 # Set the delay of the current
