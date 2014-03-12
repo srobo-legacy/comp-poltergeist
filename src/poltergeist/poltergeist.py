@@ -1,3 +1,4 @@
+from collections import namedtuple
 from datetime import datetime
 from match import Match
 from match_db import MatchDB
