@@ -4,4 +4,9 @@ then
     echo "No 'dep' directory... did you run ./install?"
     exit 1
 fi
-exec dep/bin/python `which nosetests` tests $@
+nose=dep/bin/nosetests
+if [ ! -f "$nose" ]
+then
+	nose=`which nosetests`
+fi
+exec dep/bin/python $nose tests $@
