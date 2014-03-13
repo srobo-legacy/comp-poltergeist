@@ -1,9 +1,9 @@
+
 from collections import namedtuple
 from datetime import datetime
-from match import Match
+
 from match_db import MatchDB
 import redis_client
-from team import Team
 from team_db import TeamDB
 from utils import parse_time
 
