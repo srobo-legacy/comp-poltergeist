@@ -20,6 +20,7 @@ if not (req_team in team_ids or req_team == ALL_OPT):
     print >> sys.stderr, "Unknown team '{0}'.".format(req_team)
     exit(2)
 
+# TODO: remove need for arguments when requesting all the matches
 match_data = talk.command_yaml('list-matches 2013-01-01 2014-01-01')
 match_data = match_data['matches']
 

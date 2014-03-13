@@ -4,7 +4,7 @@ from datetime import datetime
 import talk
 from display_utils import HTMLSchedule, Schedule
 
-
+# TODO: remove need for arguments when requesting all the matches
 match_data = talk.command_yaml('list-matches 2013-01-01 2014-01-01')
 match_data = match_data['matches']
 
